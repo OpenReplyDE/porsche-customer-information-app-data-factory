@@ -1,0 +1,9 @@
+{
+	"name": "cia-datafactory",
+	"location": "germanywestcentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "c21d66f7-9a06-41c3-ad1f-9beed003d1c9",
+		"tenantId": "56564e0f-83d3-4b52-92e8-a6bb9ea36564"
+	}
+}
