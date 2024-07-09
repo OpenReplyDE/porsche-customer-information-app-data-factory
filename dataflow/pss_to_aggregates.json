@@ -27,9 +27,6 @@
 				},
 				{
 					"name": "derivedColumn1"
-				},
-				{
-					"name": "derivedColumn2"
 				}
 			],
 			"scriptLines": [
@@ -356,16 +353,13 @@
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true) ~> pss",
-				"pss aggregate(totalCount = count(Q1701),",
+				"pss aggregate(groupBy(model_descr),",
+				"     totalCount = count(Q1701),",
 				"          maleCount = countIf(Q1701 == 1),",
 				"          femaleCount = countIf(Q1701 == 2)) ~> aggregates",
-				"aggregates derive(male = round(toDouble(maleCount) / toDouble(totalCount), 2),",
-				"          female = round(toDouble(femaleCount) / toDouble(totalCount), 2)) ~> derivedColumn1",
-				"derivedColumn1 derive(year = \"2024\",",
-				"          category = \"All Models\",",
-				"          malePercentage = male,",
-				"          femalePercentage = female) ~> derivedColumn2",
-				"derivedColumn2 sink(allowSchemaDrift: true,",
+				"aggregates derive(malePercentage = round(toDouble(maleCount) / toDouble(totalCount), 2),",
+				"          femalePercentage = round(toDouble(femaleCount) / toDouble(totalCount), 2)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
@@ -375,10 +369,9 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     mapColumn(",
-				"          year,",
-				"          category,",
-				"          malePercentage,",
-				"          femalePercentage",
+				"          model_descr,",
+				"          male = malePercentage,",
+				"          female = femalePercentage",
 				"     )) ~> sink1"
 			]
 		}
