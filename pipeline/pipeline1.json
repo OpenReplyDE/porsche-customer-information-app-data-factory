@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
+				"name": "GenderPerModelData",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
