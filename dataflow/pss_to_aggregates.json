@@ -30,9 +30,6 @@
 				},
 				{
 					"name": "derivedColumn2"
-				},
-				{
-					"name": "combinedJson"
 				}
 			],
 			"scriptLines": [
@@ -365,20 +362,28 @@
 				"          femaleCount = countIf(Q1701 == 2)) ~> aggregates",
 				"aggregates derive(malePercentage = round(toDouble(maleCount) / toDouble(totalCount), 2),",
 				"          femalePercentage = round(toDouble(femaleCount) / toDouble(totalCount), 2)) ~> derivedColumn1",
-				"derivedColumn1 derive(modelJson = concat(",
-				"        '{ \"model\": \"', model_descr, '\",  \"male\": ', toString(malePercentage), ",
-				"        ', \"female\": ', toString(femalePercentage), ' }'",
-				"    )) ~> derivedColumn2",
-				"derivedColumn2 aggregate(DE = collect(modelJson)) ~> combinedJson",
-				"combinedJson sink(allowSchemaDrift: true,",
+				"derivedColumn1 derive(model = model_descr,",
+				"          male = malePercentage,",
+				"          female = femalePercentage,",
+				"          market = 'DE',",
+				"          year = 2024) ~> derivedColumn2",
+				"derivedColumn2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
+				"     filePattern:'de_2024',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          model,",
+				"          male,",
+				"          female,",
+				"          market,",
+				"          year",
+				"     )) ~> sink1"
 			]
 		}
 	}
