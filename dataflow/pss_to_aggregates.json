@@ -371,7 +371,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     filePattern:'de_2024',",
+				"     filePattern:'de_2024.json',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
