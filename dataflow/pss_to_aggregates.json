@@ -10,13 +10,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "deData"
-				},
-				{
-					"dataset": {
-						"referenceName": "DelimitedText2",
-						"type": "DatasetReference"
-					},
-					"name": "usaData"
 				}
 			],
 			"sinks": [
@@ -34,6 +27,15 @@
 				},
 				{
 					"name": "modelDerived"
+				},
+				{
+					"name": "allModelsAggregate"
+				},
+				{
+					"name": "allModelsDerived"
+				},
+				{
+					"name": "unionAllModels"
 				},
 				{
 					"name": "modelJsonData"
@@ -364,16 +366,20 @@
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true) ~> deData",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> usaData",
 				"deData aggregate(groupBy(model_descr),",
 				"     totalCount = count(Q1701),",
 				"          maleCount = countIf(Q1701 == 1),",
 				"          femaleCount = countIf(Q1701 == 2)) ~> modelAggregates",
 				"modelAggregates derive(malePercentage = round(toDouble(maleCount) / toDouble(totalCount), 2),",
 				"          femalePercentage = round(toDouble(femaleCount) / toDouble(totalCount), 2)) ~> modelDerived",
-				"modelDerived derive(modelJson = @(model=model_descr,",
+				"modelAggregates aggregate(totalCountAll = sum(totalCount),",
+				"          maleCountAll = sum(maleCount),",
+				"          femaleCountAll = sum(femaleCount)) ~> allModelsAggregate",
+				"allModelsAggregate derive(model_descr = 'All models',",
+				"          malePercentage = round(toDouble(maleCountAll) / toDouble(totalCountAll), 2),",
+				"          femalePercentage = round(toDouble(femaleCountAll) / toDouble(totalCountAll), 2)) ~> allModelsDerived",
+				"modelDerived, allModelsDerived union(byName: true)~> unionAllModels",
+				"unionAllModels derive(modelJson = @(model=model_descr,",
 				"          male=malePercentage,",
 				"          female=femalePercentage,",
 				"          market='DE',",
@@ -384,6 +390,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
+				"     filePattern:'de-2024.json',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
