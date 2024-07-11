@@ -38,6 +38,9 @@
 					"name": "unionAllModels"
 				},
 				{
+					"name": "sortedModels"
+				},
+				{
 					"name": "modelJsonData"
 				},
 				{
@@ -379,7 +382,8 @@
 				"          malePercentage = round(toDouble(maleCountAll) / toDouble(totalCountAll), 2),",
 				"          femalePercentage = round(toDouble(femaleCountAll) / toDouble(totalCountAll), 2)) ~> allModelsDerived",
 				"modelDerived, allModelsDerived union(byName: true)~> unionAllModels",
-				"unionAllModels derive(modelJson = @(model=model_descr,",
+				"unionAllModels sort(asc(iif(model_descr == 'All models', 1, 2), true)) ~> sortedModels",
+				"sortedModels derive(modelJson = @(model=model_descr,",
 				"          male=malePercentage,",
 				"          female=femalePercentage,",
 				"          market='DE',",
@@ -390,7 +394,6 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     filePattern:'de-2024.json',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
