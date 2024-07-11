@@ -9,7 +9,14 @@
 						"referenceName": "DelimitedText1",
 						"type": "DatasetReference"
 					},
-					"name": "pss"
+					"name": "deData"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					},
+					"name": "usaData"
 				}
 			],
 			"sinks": [
@@ -356,8 +363,11 @@
 				"     columnDelimiter: ';',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
-				"     columnNamesAsHeader: true) ~> pss",
-				"pss aggregate(groupBy(model_descr),",
+				"     columnNamesAsHeader: true) ~> deData",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> usaData",
+				"deData aggregate(groupBy(model_descr),",
 				"     totalCount = count(Q1701),",
 				"          maleCount = countIf(Q1701 == 1),",
 				"          femaleCount = countIf(Q1701 == 2)) ~> modelAggregates",
