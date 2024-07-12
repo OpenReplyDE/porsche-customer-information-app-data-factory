@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText2",
+	"name": "UK_data",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage2",
@@ -10,10 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "240701_USA_PSS_RawData_00.csv",
+				"fileName": "CIA_raw_data_exportV2(Sheet1) (1).csv",
 				"container": "test-data"
 			},
-			"columnDelimiter": ";",
+			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
