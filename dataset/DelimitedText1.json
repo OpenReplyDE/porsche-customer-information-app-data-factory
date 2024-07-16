@@ -1,0 +1,252 @@
+{
+	"name": "DelimitedText1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "240715_CIA_raw_data_export_00(Sheet1).csv",
+				"container": "test-data"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ResponseId",
+				"type": "String"
+			},
+			{
+				"name": "EndDate",
+				"type": "String"
+			},
+			{
+				"name": "ED_MODEL_CODE",
+				"type": "String"
+			},
+			{
+				"name": "ED_MODEL_YEAR",
+				"type": "String"
+			},
+			{
+				"name": "1711-1712",
+				"type": "String"
+			},
+			{
+				"name": "Q4601",
+				"type": "String"
+			},
+			{
+				"name": "Q4531",
+				"type": "String"
+			},
+			{
+				"name": "Q4609",
+				"type": "String"
+			},
+			{
+				"name": "Q5386",
+				"type": "String"
+			},
+			{
+				"name": "Q2002",
+				"type": "String"
+			},
+			{
+				"name": "Q2012",
+				"type": "String"
+			},
+			{
+				"name": "1701",
+				"type": "String"
+			},
+			{
+				"name": "1721",
+				"type": "String"
+			},
+			{
+				"name": "1731-1732",
+				"type": "String"
+			},
+			{
+				"name": "V1021",
+				"type": "String"
+			},
+			{
+				"name": "1950",
+				"type": "String"
+			},
+			{
+				"name": "670",
+				"type": "String"
+			},
+			{
+				"name": "671g_1_1_1",
+				"type": "String"
+			},
+			{
+				"name": "671g_1_1_3",
+				"type": "String"
+			},
+			{
+				"name": "671g_1_1_5",
+				"type": "String"
+			},
+			{
+				"name": "711",
+				"type": "String"
+			},
+			{
+				"name": "713g_1_1",
+				"type": "String"
+			},
+			{
+				"name": "713g_1_3",
+				"type": "String"
+			},
+			{
+				"name": "713g_1_5",
+				"type": "String"
+			},
+			{
+				"name": "1961g_1_1_1",
+				"type": "String"
+			},
+			{
+				"name": "1961g_1_1_3",
+				"type": "String"
+			},
+			{
+				"name": "1961g_1_1_5",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3931",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3932",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3933",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3934",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3935",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3936",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3937",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3938",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3939",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3940",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3941",
+				"type": "String"
+			},
+			{
+				"name": "1961g_2_1_1",
+				"type": "String"
+			},
+			{
+				"name": "1961g_3_1_1",
+				"type": "String"
+			},
+			{
+				"name": "ED_AUTH_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "3881g_38813883",
+				"type": "String"
+			},
+			{
+				"name": "2674-2675",
+				"type": "String"
+			},
+			{
+				"name": "1909-1910",
+				"type": "String"
+			},
+			{
+				"name": "Market",
+				"type": "String"
+			},
+			{
+				"name": "Description",
+				"type": "String"
+			},
+			{
+				"name": "Type",
+				"type": "String"
+			},
+			{
+				"name": "Model_Row",
+				"type": "String"
+			},
+			{
+				"name": "Derivate",
+				"type": "String"
+			},
+			{
+				"name": "NBOSegment",
+				"type": "String"
+			},
+			{
+				"name": "Drive",
+				"type": "String"
+			},
+			{
+				"name": "Body",
+				"type": "String"
+			},
+			{
+				"name": "PerformanceLevel",
+				"type": "String"
+			},
+			{
+				"name": "TypeSOP",
+				"type": "String"
+			},
+			{
+				"name": "TypeEOP",
+				"type": "String"
+			},
+			{
+				"name": "Top",
+				"type": "String"
+			},
+			{
+				"name": "Classic",
+				"type": "String"
+			}
+		]
+	}
+}
