@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "full_data",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -222,11 +222,18 @@
 				"unionAllModels sort(asc(iif(model_descr == 'All models', 1, 2), true)) ~> sortedModels",
 				"sortedModels derive(modelJson = @(model=model_descr,",
 				"          male=@(percentage=malePercentage,",
-				"          ageGroups=maleAgeGroups),",
+				"          ageGroups=maleAgeGroups,",
+				"          married=round(toDouble(marriedCount) / toDouble(totalRelationshipCount), 2),",
+				"          single=round(toDouble(singleCount) / toDouble(totalRelationshipCount), 2),",
+				"          other=round(1 - (toDouble(marriedCount) + toDouble(singleCount)) / toDouble(totalRelationshipCount), 2)),",
 				"          female=@(percentage=femalePercentage,",
-				"          ageGroups=femaleAgeGroups),",
+				"          ageGroups=femaleAgeGroups,",
+				"          married=round(toDouble(marriedCount) / toDouble(totalRelationshipCount), 2),",
+				"          single=round(toDouble(singleCount) / toDouble(totalRelationshipCount), 2),",
+				"          other=round(1 - (toDouble(marriedCount) + toDouble(singleCount)) / toDouble(totalRelationshipCount), 2)),",
 				"          married=marriedPercentage,",
 				"          single=singlePercentage,",
+				"          other=round(1 - marriedPercentage - singlePercentage, 2),",
 				"          market='DE',",
 				"          year=2024)) ~> modelJsonData",
 				"modelJsonData aggregate(groupBy(dummy = 1),",
