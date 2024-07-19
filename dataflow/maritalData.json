@@ -1,0 +1,83 @@
+{
+	"name": "maritalData",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "maritalData"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          ResponseId as string,",
+				"          EndDate as string,",
+				"          ED_MODEL_CODE as string,",
+				"          ED_MODEL_YEAR as string,",
+				"          {1711-1712} as integer,",
+				"          Q4601 as string,",
+				"          Q4531 as integer,",
+				"          Q4609 as string,",
+				"          Q5386 as string,",
+				"          Q2002 as string,",
+				"          Q2012 as string,",
+				"          {1701} as integer,",
+				"          {1721} as integer,",
+				"          {1731-1732} as string,",
+				"          V1021 as string,",
+				"          {1950} as string,",
+				"          {670} as string,",
+				"          {671g_1_1_1} as string,",
+				"          {671g_1_1_3} as string,",
+				"          {671g_1_1_5} as string,",
+				"          {711} as string,",
+				"          {713g_1_1} as string,",
+				"          {713g_1_3} as string,",
+				"          {713g_1_5} as string,",
+				"          {1961g_1_1_1} as string,",
+				"          {1961g_1_1_3} as string,",
+				"          {1961g_1_1_5} as string,",
+				"          {3931g_3931} as string,",
+				"          {3931g_3932} as string,",
+				"          {3931g_3933} as string,",
+				"          {3931g_3934} as string,",
+				"          {3931g_3935} as string,",
+				"          {3931g_3936} as string,",
+				"          {3931g_3937} as string,",
+				"          {3931g_3938} as string,",
+				"          {3931g_3939} as string,",
+				"          {3931g_3940} as string,",
+				"          {3931g_3941} as string,",
+				"          {1961g_2_1_1} as string,",
+				"          {1961g_3_1_1} as string,",
+				"          ED_AUTH_GROUP as string,",
+				"          {3881g_38813883} as string,",
+				"          {2674-2675} as string,",
+				"          {1909-1910} as string,",
+				"          Market as string,",
+				"          Description as string,",
+				"          Type as string,",
+				"          Model_Row as string,",
+				"          Derivate as string,",
+				"          NBOSegment as string,",
+				"          Drive as string,",
+				"          Body as string,",
+				"          PerformanceLevel as string,",
+				"          TypeSOP as string,",
+				"          TypeEOP as string,",
+				"          Top as string,",
+				"          Classic as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> maritalData"
+			]
+		}
+	}
+}
