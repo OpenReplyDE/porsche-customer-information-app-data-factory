@@ -214,7 +214,7 @@
 				"CalculatePercentages derive(MappedMarket = case(",
 				"        Market == 'PGCN', 'CN',",
 				"        Market == 'PCGB', 'UK',",
-				"        Market == 'PCNA', 'USA',",
+				"        Market == 'PCNA', 'US',",
 				"        Market == 'PD', 'DE',",
 				"        Market",
 				"    )) ~> MapMarketCodes",
