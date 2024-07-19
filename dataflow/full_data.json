@@ -18,7 +18,7 @@
 						"referenceName": "AzureDataLakeStorage1",
 						"type": "LinkedServiceReference"
 					},
-					"name": "sink1"
+					"name": "newCarBuyersGender"
 				}
 			],
 			"transformations": [
@@ -264,7 +264,7 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> newCarBuyersGender"
 			]
 		}
 	}
