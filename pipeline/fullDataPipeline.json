@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "full_data",
+				"name": "genderData",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "full_data",
+						"referenceName": "genderData",
 						"type": "DataFlowReference"
 					},
 					"compute": {

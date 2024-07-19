@@ -1,5 +1,5 @@
 {
-	"name": "full_data",
+	"name": "genderData",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
