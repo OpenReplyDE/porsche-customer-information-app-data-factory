@@ -12,8 +12,38 @@
 					"name": "maritalData"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "maritalDataSinkfewd"
+				}
+			],
+			"transformations": [
+				{
+					"name": "addDerivedColumns"
+				},
+				{
+					"name": "filterValidMaritalData"
+				},
+				{
+					"name": "aggregateMaritalData"
+				},
+				{
+					"name": "calculateMaritalPercentages"
+				},
+				{
+					"name": "selectFinalMaritalColumns"
+				},
+				{
+					"name": "collectIntoArray"
+				},
+				{
+					"name": "selectArrayColumn"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          ResponseId as string,",
@@ -76,7 +106,63 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> maritalData"
+				"     ignoreNoFilesFound: false) ~> maritalData",
+				"maritalData derive(ModelGroup = iif(isNull(Derivate) || Derivate == '', Model_Row, ",
+				"                     iif(startsWith(Derivate, Model_Row), Derivate, Model_Row + ' ' + Derivate)),",
+				"          Year = left(EndDate, 4)) ~> addDerivedColumns",
+				"addDerivedColumns filter(!isNull(Market) &&",
+				"    Market != '' &&",
+				"    !isNull(Year) &&",
+				"    Year != '' &&",
+				"    !isNull(ModelGroup) &&",
+				"    ModelGroup != '' &&",
+				"    ((Market == 'PCNA' && !isNull(Q4531)) ||",
+				"     (Market != 'PCNA' && !isNull({1721})))) ~> filterValidMaritalData",
+				"filterValidMaritalData aggregate(groupBy(Market,",
+				"          Year,",
+				"          ModelGroup),",
+				"     totalCount = count(),",
+				"          marriedCount = countIf(iif(Market == 'PCNA', Q4531 == 1, {1721} == 1)),",
+				"          singleCount = countIf(iif(Market == 'PCNA', Q4531 == 2, {1721} == 2))) ~> aggregateMaritalData",
+				"aggregateMaritalData derive(married = round(toDouble(marriedCount) / toDouble(totalCount), 2),",
+				"          single = round(toDouble(singleCount) / toDouble(totalCount), 2),",
+				"          MappedMarket = case(",
+				"        Market == 'PGCN', 'CN',",
+				"        Market == 'PCGB', 'UK',",
+				"        Market == 'PCNA', 'US',",
+				"        Market == 'PD', 'DE',",
+				"        Market",
+				"    )) ~> calculateMaritalPercentages",
+				"calculateMaritalPercentages select(mapColumn(",
+				"          market = MappedMarket,",
+				"          year = Year,",
+				"          model = ModelGroup,",
+				"          married,",
+				"          single",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> selectFinalMaritalColumns",
+				"selectFinalMaritalColumns aggregate(groupBy(dummy = 1),",
+				"     data = collect(@(market = market,",
+				"                     year = year,",
+				"                     model = model,",
+				"                     married = married,",
+				"                     single = single))) ~> collectIntoArray",
+				"collectIntoArray select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> selectArrayColumn",
+				"selectArrayColumn sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     filePattern:'maritalData.json',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> maritalDataSinkfewd"
 			]
 		}
 	}

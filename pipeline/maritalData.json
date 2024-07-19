@@ -1,9 +1,9 @@
 {
-	"name": "pipeline1",
+	"name": "maritalData",
 	"properties": {
 		"activities": [
 			{
-				"name": "pss_to_aggregates",
+				"name": "maritalData",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "pss_to_aggregates",
+						"referenceName": "maritalData",
 						"type": "DataFlowReference"
 					},
 					"compute": {
