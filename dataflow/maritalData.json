@@ -160,12 +160,13 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     filePattern:'maritalData.json',",
+				"     partitionFileNames:['maritalStatusChart.json'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> maritalDataSinkfewd"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> maritalDataSinkfewd"
 			]
 		}
 	}
