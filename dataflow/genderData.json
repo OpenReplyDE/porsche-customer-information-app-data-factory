@@ -258,7 +258,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     partitionFileNames:['newCarBuyersGenderCharts.json'],",
+				"     partitionFileNames:['newCarBuyersGenderChart.json'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
