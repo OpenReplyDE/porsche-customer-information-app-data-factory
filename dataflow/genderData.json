@@ -35,6 +35,15 @@
 					"name": "AggregateGenderData"
 				},
 				{
+					"name": "ExtractBaseModel"
+				},
+				{
+					"name": "AggregateCarModels"
+				},
+				{
+					"name": "PrepareCarModelsData"
+				},
+				{
 					"name": "AggregateAllModels"
 				},
 				{
@@ -184,10 +193,10 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameColumns",
 				"RenameColumns derive(ModelGroup = iif(isNull(Derivate) || Derivate == '' || Derivate == Model_Row, ",
-				"                     Model_Row + ' Basic', ",
-				"                     iif(startsWith(Derivate, Model_Row), ",
-				"                         Derivate, ",
-				"                         Model_Row + ' ' + Derivate)),",
+				"                 Model_Row + ' Basic', ",
+				"                 iif(startsWith(Derivate, Model_Row), ",
+				"                    Derivate, ",
+				"                    Model_Row + ' ' + Derivate)),",
 				"          Year = toString(year(EndDate))) ~> AddDerivedColumns",
 				"AddDerivedColumns filter(!isNull(Market) &&",
 				"    Market != '' &&",
@@ -202,6 +211,14 @@
 				"     totalCount = count(),",
 				"          maleCount = countIf(Q1701 == 1),",
 				"          femaleCount = countIf(Q1701 == 2)) ~> AggregateGenderData",
+				"AggregateGenderData derive(BaseModel = trim(split(ModelGroup, ' ')[1])) ~> ExtractBaseModel",
+				"ExtractBaseModel aggregate(groupBy(Market,",
+				"          Year,",
+				"          BaseModel),",
+				"     totalCount = sum(totalCount),",
+				"          maleCount = sum(maleCount),",
+				"          femaleCount = sum(femaleCount)) ~> AggregateCarModels",
+				"AggregateCarModels derive(ModelGroup = BaseModel + ' All') ~> PrepareCarModelsData",
 				"FilterValidData aggregate(groupBy(Market,",
 				"          Year),",
 				"     allModelsTotalCount = count(),",
@@ -211,15 +228,15 @@
 				"          totalCount = allModelsTotalCount,",
 				"          maleCount = allModelsMaleCount,",
 				"          femaleCount = allModelsFemaleCount) ~> PrepareAllModelsData",
-				"AggregateGenderData, PrepareAllModelsData union(byName: true)~> UnionModelData",
+				"AggregateGenderData, PrepareCarModelsData, PrepareAllModelsData union(byName: true)~> UnionModelData",
 				"UnionModelData derive(male = round(toDouble(maleCount) / toDouble(totalCount), 2),",
 				"          female = round(toDouble(femaleCount) / toDouble(totalCount), 2)) ~> CalculatePercentages",
 				"CalculatePercentages derive(MappedMarket = case(",
-				"       Market == 'PGCN', 'CN',",
-				"       Market == 'PCGB', 'UK',",
-				"       Market == 'PCNA', 'US',",
-				"       Market == 'PD', 'DE',",
-				"       Market",
+				"      Market == 'PGCN', 'CN',",
+				"      Market == 'PCGB', 'UK',",
+				"      Market == 'PCNA', 'US',",
+				"      Market == 'PD', 'DE',",
+				"      Market",
 				"    )) ~> MapMarketCodes",
 				"MapMarketCodes select(mapColumn(",
 				"          market = MappedMarket,",
@@ -241,12 +258,13 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     filePattern:'newCarBuyersGender.json',",
+				"     partitionFileNames:['newCarBuyersGenderCharts.json'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> newCarBuyersGender"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> newCarBuyersGender"
 			]
 		}
 	}
