@@ -14,7 +14,11 @@
 			],
 			"sinks": [
 				{
-					"name": "sink1"
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "ageData"
 				}
 			],
 			"transformations": [
@@ -245,10 +249,16 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> FlattenOutput",
-				" sink(allowSchemaDrift: true,",
+				"FlattenOutput sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     filePattern:'ageData',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> ageData"
 			]
 		}
 	}
