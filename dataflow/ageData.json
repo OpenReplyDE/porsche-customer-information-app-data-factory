@@ -253,7 +253,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     filePattern:'ageData',",
+				"     filePattern:'ageData.json',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
