@@ -12,10 +12,54 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "RenameColumns"
+				},
+				{
+					"name": "addDerivedColumns"
+				},
+				{
+					"name": "filterValidData"
+				},
+				{
+					"name": "aggregateData"
+				},
+				{
+					"name": "aggregateBaseModelData"
+				},
+				{
+					"name": "prepareBaseModelData"
+				},
+				{
+					"name": "aggregateAllModelsData"
+				},
+				{
+					"name": "prepareAllModelsData"
+				},
+				{
+					"name": "unionModelData"
+				},
+				{
+					"name": "calculatePercentages"
+				},
+				{
+					"name": "selectFinalColumns"
+				},
+				{
+					"name": "collectIntoArray"
+				},
+				{
+					"name": "selectArrayColumn"
 				}
 			],
 			"scriptLines": [
@@ -141,7 +185,136 @@
 				"          Classic",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> RenameColumns"
+				"     skipDuplicateMapOutputs: true) ~> RenameColumns",
+				"RenameColumns derive(ModelGroup = iif(isNull(Derivate) || Derivate == '' || Derivate == Model_Row, ",
+				"                     Model_Row + ' Basic', ",
+				"                     iif(startsWith(Derivate, Model_Row), ",
+				"                         Derivate, ",
+				"                         Model_Row + ' ' + Derivate)),",
+				"          Year = left(EndDate, 4),",
+				"          BaseModel = trim(split(Model_Row, ' ')[1]),",
+				"          PurchaseType = case(",
+				"               Market == 'PCNA',",
+				"               case(Q2002 == 1 || Q2002 == 6, 'porscheModelReplaced',",
+				"                     Q2002 == 2, 'competitorModelReplaced',",
+				"                     Q2002 == 3 || Q2002 == 4 || Q2002 == 7, 'additionalBuyer',",
+				"                     Q2002 == 5, 'firstCarPurchase',",
+				"                     'other'),",
+				"               case(Q711 == 1 || Q711 == 6, 'porscheModelReplaced',",
+				"                     Q711 == 2, 'competitorModelReplaced',",
+				"                     Q711 == 3 || Q711 == 4 || Q711 == 7, 'additionalBuyer',",
+				"                     Q711 == 5, 'firstCarPurchase',",
+				"                     'other')",
+				"          )) ~> addDerivedColumns",
+				"addDerivedColumns filter(!isNull(Market) &&",
+				"    Market != '' &&",
+				"    !isNull(Year) &&",
+				"    Year != '' &&",
+				"    !isNull(ModelGroup) &&",
+				"    ModelGroup != '' &&",
+				"    !isNull(Q1701) &&",
+				"    !isNull(PurchaseType)) ~> filterValidData",
+				"filterValidData aggregate(groupBy(Market,",
+				"          Year,",
+				"          ModelGroup,",
+				"          BaseModel),",
+				"     male_total = countIf(Q1701 == 1),",
+				"          female_total = countIf(Q1701 == 2),",
+				"          male_firstCarPurchase = countIf(Q1701 == 1 && PurchaseType == 'firstCarPurchase'),",
+				"          male_additionalBuyer = countIf(Q1701 == 1 && PurchaseType == 'additionalBuyer'),",
+				"          male_porscheModelReplaced = countIf(Q1701 == 1 && PurchaseType == 'porscheModelReplaced'),",
+				"          male_competitorModelReplaced = countIf(Q1701 == 1 && PurchaseType == 'competitorModelReplaced'),",
+				"          female_firstCarPurchase = countIf(Q1701 == 2 && PurchaseType == 'firstCarPurchase'),",
+				"          female_additionalBuyer = countIf(Q1701 == 2 && PurchaseType == 'additionalBuyer'),",
+				"          female_porscheModelReplaced = countIf(Q1701 == 2 && PurchaseType == 'porscheModelReplaced'),",
+				"          female_competitorModelReplaced = countIf(Q1701 == 2 && PurchaseType == 'competitorModelReplaced')) ~> aggregateData",
+				"aggregateData aggregate(groupBy(Market,",
+				"          Year,",
+				"          BaseModel),",
+				"     male_total = sum(male_total),",
+				"          female_total = sum(female_total),",
+				"          male_firstCarPurchase = sum(male_firstCarPurchase),",
+				"          male_additionalBuyer = sum(male_additionalBuyer),",
+				"          male_porscheModelReplaced = sum(male_porscheModelReplaced),",
+				"          male_competitorModelReplaced = sum(male_competitorModelReplaced),",
+				"          female_firstCarPurchase = sum(female_firstCarPurchase),",
+				"          female_additionalBuyer = sum(female_additionalBuyer),",
+				"          female_porscheModelReplaced = sum(female_porscheModelReplaced),",
+				"          female_competitorModelReplaced = sum(female_competitorModelReplaced)) ~> aggregateBaseModelData",
+				"aggregateBaseModelData derive(ModelGroup = BaseModel + ' All') ~> prepareBaseModelData",
+				"filterValidData aggregate(groupBy(Market,",
+				"          Year),",
+				"     male_total = countIf(Q1701 == 1),",
+				"          female_total = countIf(Q1701 == 2),",
+				"          male_firstCarPurchase = countIf(Q1701 == 1 && PurchaseType == 'firstCarPurchase'),",
+				"          male_additionalBuyer = countIf(Q1701 == 1 && PurchaseType == 'additionalBuyer'),",
+				"          male_porscheModelReplaced = countIf(Q1701 == 1 && PurchaseType == 'porscheModelReplaced'),",
+				"          male_competitorModelReplaced = countIf(Q1701 == 1 && PurchaseType == 'competitorModelReplaced'),",
+				"          female_firstCarPurchase = countIf(Q1701 == 2 && PurchaseType == 'firstCarPurchase'),",
+				"          female_additionalBuyer = countIf(Q1701 == 2 && PurchaseType == 'additionalBuyer'),",
+				"          female_porscheModelReplaced = countIf(Q1701 == 2 && PurchaseType == 'porscheModelReplaced'),",
+				"          female_competitorModelReplaced = countIf(Q1701 == 2 && PurchaseType == 'competitorModelReplaced')) ~> aggregateAllModelsData",
+				"aggregateAllModelsData derive(ModelGroup = 'All Models') ~> prepareAllModelsData",
+				"aggregateData, prepareBaseModelData, prepareAllModelsData union(byName: true)~> unionModelData",
+				"unionModelData derive(male_firstCarPurchase = coalesce(round(male_firstCarPurchase / male_total, 2), 0),",
+				"          male_additionalBuyer = coalesce(round(male_additionalBuyer / male_total, 2), 0),",
+				"          male_porscheModelReplaced = coalesce(round(male_porscheModelReplaced / male_total, 2), 0),",
+				"          male_competitorModelReplaced = coalesce(round(male_competitorModelReplaced / male_total, 2), 0),",
+				"          female_firstCarPurchase = coalesce(round(female_firstCarPurchase / female_total, 2), 0),",
+				"          female_additionalBuyer = coalesce(round(female_additionalBuyer / female_total, 2), 0),",
+				"          female_porscheModelReplaced = coalesce(round(female_porscheModelReplaced / female_total, 2), 0),",
+				"          female_competitorModelReplaced = coalesce(round(female_competitorModelReplaced / female_total, 2), 0),",
+				"          MappedMarket = case(",
+				"        Market == 'PGCN', 'CN',",
+				"        Market == 'PCGB', 'UK',",
+				"        Market == 'PCNA', 'US',",
+				"        Market == 'PD', 'DE',",
+				"        Market",
+				"    )) ~> calculatePercentages",
+				"calculatePercentages select(mapColumn(",
+				"          market = MappedMarket,",
+				"          year = Year,",
+				"          model = ModelGroup,",
+				"          male_firstCarPurchase,",
+				"          male_additionalBuyer,",
+				"          male_porscheModelReplaced,",
+				"          male_competitorModelReplaced,",
+				"          female_firstCarPurchase,",
+				"          female_additionalBuyer,",
+				"          female_porscheModelReplaced,",
+				"          female_competitorModelReplaced",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> selectFinalColumns",
+				"selectFinalColumns aggregate(groupBy(dummy = 1),",
+				"     data = collect(@(market = market,",
+				"                 year = year,",
+				"                 model = model,",
+				"                 male_firstCarPurchase = male_firstCarPurchase,",
+				"                 male_additionalBuyer = male_additionalBuyer,",
+				"                 male_porscheModelReplaced = male_porscheModelReplaced,",
+				"                 male_competitorModelReplaced = male_competitorModelReplaced,",
+				"                 female_firstCarPurchase = female_firstCarPurchase,",
+				"                 female_additionalBuyer = female_additionalBuyer,",
+				"                 female_porscheModelReplaced = female_porscheModelReplaced,",
+				"                 female_competitorModelReplaced = female_competitorModelReplaced",
+				"     ))) ~> collectIntoArray",
+				"collectIntoArray select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> selectArrayColumn",
+				"selectArrayColumn sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:['buyerTypeChart.json'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
