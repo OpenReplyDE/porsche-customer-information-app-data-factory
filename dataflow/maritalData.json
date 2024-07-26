@@ -14,7 +14,11 @@
 			],
 			"sinks": [
 				{
-					"name": "maritalDataSinkfewd"
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "maritalDataSink"
 				}
 			],
 			"transformations": [
@@ -166,10 +170,17 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> selectArrayColumn",
-				" sink(allowSchemaDrift: true,",
+				"selectArrayColumn sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:['maritalStatusChart.json'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> maritalDataSinkfewd"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> maritalDataSink"
 			]
 		}
 	}
