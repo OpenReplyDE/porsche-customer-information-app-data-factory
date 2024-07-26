@@ -14,6 +14,10 @@
 			],
 			"sinks": [
 				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
 					"name": "ageData"
 				}
 			],
@@ -309,10 +313,17 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> FlattenOutput",
-				" sink(allowSchemaDrift: true,",
+				"FlattenOutput sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:['newCarBuyersAgeChart.json'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> ageData"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> ageData"
 			]
 		}
 	}
