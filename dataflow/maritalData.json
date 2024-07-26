@@ -32,6 +32,21 @@
 					"name": "aggregateMaritalData"
 				},
 				{
+					"name": "aggregateBaseModelData"
+				},
+				{
+					"name": "prepareBaseModelData"
+				},
+				{
+					"name": "aggregateAllModelsData"
+				},
+				{
+					"name": "prepareAllModelsData"
+				},
+				{
+					"name": "unionModelData"
+				},
+				{
 					"name": "calculateMaritalPercentages"
 				},
 				{
@@ -112,7 +127,8 @@
 				"                     iif(startsWith(Derivate, Model_Row), ",
 				"                         Derivate, ",
 				"                         Model_Row + ' ' + Derivate)),",
-				"          Year = left(EndDate, 4)) ~> addDerivedColumns",
+				"          Year = left(EndDate, 4),",
+				"          BaseModel = trim(split(Model_Row, ' ')[1])) ~> addDerivedColumns",
 				"addDerivedColumns filter(!isNull(Market) &&",
 				"    Market != '' &&",
 				"    !isNull(Year) &&",
@@ -124,7 +140,8 @@
 				"    !isNull({1701})) ~> filterValidMaritalData",
 				"filterValidMaritalData aggregate(groupBy(Market,",
 				"          Year,",
-				"          ModelGroup),",
+				"          ModelGroup,",
+				"          BaseModel),",
 				"     male_total = countIf({1701} == 1 && (iif(Market == 'PCNA', ",
 				"                          Q4531 == 1 || Q4531 == 2 || Q4531 == 3 || Q4531 == 6, ",
 				"                          {1721} == 1 || {1721} == 2 || {1721} == 3 || {1721} == 6))),",
@@ -135,7 +152,31 @@
 				"          male_single = countIf({1701} == 1 && (iif(Market == 'PCNA', Q4531 == 2 || Q4531 == 3 || Q4531 == 6, {1721} == 2 || {1721} == 3 || {1721} == 6))),",
 				"          female_married = countIf({1701} == 2 && (iif(Market == 'PCNA', Q4531 == 1, {1721} == 1))),",
 				"          female_single = countIf({1701} == 2 && (iif(Market == 'PCNA', Q4531 == 2 || Q4531 == 3 || Q4531 == 6, {1721} == 2 || {1721} == 3 || {1721} == 6)))) ~> aggregateMaritalData",
-				"aggregateMaritalData derive(male_married = round(toDouble(male_married) / toDouble(male_total), 2),",
+				"aggregateMaritalData aggregate(groupBy(Market,",
+				"          Year,",
+				"          BaseModel),",
+				"     male_total = sum(male_total),",
+				"          female_total = sum(female_total),",
+				"          male_married = sum(male_married),",
+				"          male_single = sum(male_single),",
+				"          female_married = sum(female_married),",
+				"          female_single = sum(female_single)) ~> aggregateBaseModelData",
+				"aggregateBaseModelData derive(ModelGroup = BaseModel + ' All') ~> prepareBaseModelData",
+				"filterValidMaritalData aggregate(groupBy(Market,",
+				"          Year),",
+				"     male_total = countIf({1701} == 1 && (iif(Market == 'PCNA', ",
+				"                          Q4531 == 1 || Q4531 == 2 || Q4531 == 3 || Q4531 == 6, ",
+				"                          {1721} == 1 || {1721} == 2 || {1721} == 3 || {1721} == 6))),",
+				"          female_total = countIf({1701} == 2 && (iif(Market == 'PCNA', ",
+				"                          Q4531 == 1 || Q4531 == 2 || Q4531 == 3 || Q4531 == 6, ",
+				"                          {1721} == 1 || {1721} == 2 || {1721} == 3 || {1721} == 6))),",
+				"          male_married = countIf({1701} == 1 && (iif(Market == 'PCNA', Q4531 == 1, {1721} == 1))),",
+				"          male_single = countIf({1701} == 1 && (iif(Market == 'PCNA', Q4531 == 2 || Q4531 == 3 || Q4531 == 6, {1721} == 2 || {1721} == 3 || {1721} == 6))),",
+				"          female_married = countIf({1701} == 2 && (iif(Market == 'PCNA', Q4531 == 1, {1721} == 1))),",
+				"          female_single = countIf({1701} == 2 && (iif(Market == 'PCNA', Q4531 == 2 || Q4531 == 3 || Q4531 == 6, {1721} == 2 || {1721} == 3 || {1721} == 6)))) ~> aggregateAllModelsData",
+				"aggregateAllModelsData derive(ModelGroup = 'All Models') ~> prepareAllModelsData",
+				"aggregateMaritalData, prepareBaseModelData, prepareAllModelsData union(byName: true)~> unionModelData",
+				"unionModelData derive(male_married = round(toDouble(male_married) / toDouble(male_total), 2),",
 				"          male_single = round(toDouble(male_single) / toDouble(male_total), 2),",
 				"          female_married = round(toDouble(female_married) / toDouble(female_total), 2),",
 				"          female_single = round(toDouble(female_single) / toDouble(female_total), 2),",
