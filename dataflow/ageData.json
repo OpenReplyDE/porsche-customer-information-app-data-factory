@@ -317,7 +317,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     partitionFileNames:['newCarBuyersAgeChart.json'],",
+				"     partitionFileNames:['ageTotalCustomerBaseChart.json'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
