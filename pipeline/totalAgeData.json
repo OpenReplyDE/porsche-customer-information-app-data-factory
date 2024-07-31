@@ -1,5 +1,5 @@
 {
-	"name": "ageData",
+	"name": "totalAgeData",
 	"properties": {
 		"activities": [
 			{
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "ageData",
+						"referenceName": "totalAgeData",
 						"type": "DataFlowReference"
 					},
 					"compute": {

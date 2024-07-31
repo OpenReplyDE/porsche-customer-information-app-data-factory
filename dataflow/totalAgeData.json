@@ -1,5 +1,5 @@
 {
-	"name": "ageData",
+	"name": "totalAgeData",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
