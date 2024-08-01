@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "genderData",
+						"referenceName": "newBuyersGenderData",
 						"type": "DataFlowReference"
 					},
 					"compute": {
