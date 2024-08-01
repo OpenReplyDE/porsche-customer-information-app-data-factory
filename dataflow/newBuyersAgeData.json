@@ -12,13 +12,54 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "newBuyersAgeData"
+				}
+			],
 			"transformations": [
 				{
 					"name": "RenameColumns"
 				},
 				{
 					"name": "AddDerivedColumns"
+				},
+				{
+					"name": "FilterValidData"
+				},
+				{
+					"name": "AggregateGenderData"
+				},
+				{
+					"name": "AggregateBaseModelData"
+				},
+				{
+					"name": "PrepareBaseModelData"
+				},
+				{
+					"name": "AggregateAllModels"
+				},
+				{
+					"name": "PrepareAllModelsData"
+				},
+				{
+					"name": "UnionModelData"
+				},
+				{
+					"name": "CalculatePercentages"
+				},
+				{
+					"name": "SelectFinalColumns"
+				},
+				{
+					"name": "CollectAllData"
+				},
+				{
+					"name": "FlattenOutput"
 				}
 			],
 			"scriptLines": [
@@ -151,7 +192,140 @@
 				"             Derivate, ",
 				"             Model_Row + ' ' + Derivate)),",
 				"          Year = toString(year(toDate(EndDate, 'yyyy-MM-dd'))),",
-				"          BaseModel = trim(split(Model_Row, ' ')[1])) ~> AddDerivedColumns"
+				"          BaseModel = trim(split(Model_Row, ' ')[1])) ~> AddDerivedColumns",
+				"AddDerivedColumns filter(!isNull(Market) &&",
+				"Market != '' &&",
+				"!isNull(Year) &&",
+				"Year != '' &&",
+				"!isNull(ModelGroup) &&",
+				"ModelGroup != '' &&",
+				"!isNull(Q1701) &&",
+				"!isNull(Q1711_1712) &&",
+				"((Market == 'PGCN' && {711} == '5') || ",
+				" (Market != 'PGCN' && Q2002 == '5'))) ~> FilterValidData",
+				"FilterValidData aggregate(groupBy(Market,",
+				"          Year,",
+				"          ModelGroup),",
+				"     male_total = sum(iif(Q1701 == 1, 1, 0)),",
+				"          female_total = sum(iif(Q1701 == 2, 1, 0)),",
+				"          male_ageUnder29 = sum(iif(Q1701 == 1 && Q1711_1712 < 30, 1, 0)),",
+				"          male_age30To39 = sum(iif(Q1701 == 1 && Q1711_1712 >= 30 && Q1711_1712 < 40, 1, 0)),",
+				"          male_age40To49 = sum(iif(Q1701 == 1 && Q1711_1712 >= 40 && Q1711_1712 < 50, 1, 0)),",
+				"          male_age50To59 = sum(iif(Q1701 == 1 && Q1711_1712 >= 50 && Q1711_1712 < 60, 1, 0)),",
+				"          male_age60Plus = sum(iif(Q1701 == 1 && Q1711_1712 >= 60, 1, 0)),",
+				"          female_ageUnder29 = sum(iif(Q1701 == 2 && Q1711_1712 < 30, 1, 0)),",
+				"          female_age30To39 = sum(iif(Q1701 == 2 && Q1711_1712 >= 30 && Q1711_1712 < 40, 1, 0)),",
+				"          female_age40To49 = sum(iif(Q1701 == 2 && Q1711_1712 >= 40 && Q1711_1712 < 50, 1, 0)),",
+				"          female_age50To59 = sum(iif(Q1701 == 2 && Q1711_1712 >= 50 && Q1711_1712 < 60, 1, 0)),",
+				"          female_age60Plus = sum(iif(Q1701 == 2 && Q1711_1712 >= 60, 1, 0))) ~> AggregateGenderData",
+				"FilterValidData aggregate(groupBy(Market,",
+				"          Year,",
+				"          BaseModel),",
+				"     male_total = sum(iif(Q1701 == 1, 1, 0)),",
+				"          female_total = sum(iif(Q1701 == 2, 1, 0)),",
+				"          male_ageUnder29 = sum(iif(Q1701 == 1 && Q1711_1712 < 30, 1, 0)),",
+				"          male_age30To39 = sum(iif(Q1701 == 1 && Q1711_1712 >= 30 && Q1711_1712 < 40, 1, 0)),",
+				"          male_age40To49 = sum(iif(Q1701 == 1 && Q1711_1712 >= 40 && Q1711_1712 < 50, 1, 0)),",
+				"          male_age50To59 = sum(iif(Q1701 == 1 && Q1711_1712 >= 50 && Q1711_1712 < 60, 1, 0)),",
+				"          male_age60Plus = sum(iif(Q1701 == 1 && Q1711_1712 >= 60, 1, 0)),",
+				"          female_ageUnder29 = sum(iif(Q1701 == 2 && Q1711_1712 < 30, 1, 0)),",
+				"          female_age30To39 = sum(iif(Q1701 == 2 && Q1711_1712 >= 30 && Q1711_1712 < 40, 1, 0)),",
+				"          female_age40To49 = sum(iif(Q1701 == 2 && Q1711_1712 >= 40 && Q1711_1712 < 50, 1, 0)),",
+				"          female_age50To59 = sum(iif(Q1701 == 2 && Q1711_1712 >= 50 && Q1711_1712 < 60, 1, 0)),",
+				"          female_age60Plus = sum(iif(Q1701 == 2 && Q1711_1712 >= 60, 1, 0))) ~> AggregateBaseModelData",
+				"AggregateBaseModelData derive(ModelGroup = BaseModel + ' All') ~> PrepareBaseModelData",
+				"FilterValidData aggregate(groupBy(Market,",
+				"          Year),",
+				"     allModelsMale_total = sum(iif(Q1701 == 1, 1, 0)),",
+				"          allModelsFemale_total = sum(iif(Q1701 == 2, 1, 0)),",
+				"          allModelsMale_ageUnder29 = sum(iif(Q1701 == 1 && Q1711_1712 < 30, 1, 0)),",
+				"          allModelsMale_age30To39 = sum(iif(Q1701 == 1 && Q1711_1712 >= 30 && Q1711_1712 < 40, 1, 0)),",
+				"          allModelsMale_age40To49 = sum(iif(Q1701 == 1 && Q1711_1712 >= 40 && Q1711_1712 < 50, 1, 0)),",
+				"          allModelsMale_age50To59 = sum(iif(Q1701 == 1 && Q1711_1712 >= 50 && Q1711_1712 < 60, 1, 0)),",
+				"          allModelsMale_age60Plus = sum(iif(Q1701 == 1 && Q1711_1712 >= 60, 1, 0)),",
+				"          allModelsFemale_ageUnder29 = sum(iif(Q1701 == 2 && Q1711_1712 < 30, 1, 0)),",
+				"          allModelsFemale_age30To39 = sum(iif(Q1701 == 2 && Q1711_1712 >= 30 && Q1711_1712 < 40, 1, 0)),",
+				"          allModelsFemale_age40To49 = sum(iif(Q1701 == 2 && Q1711_1712 >= 40 && Q1711_1712 < 50, 1, 0)),",
+				"          allModelsFemale_age50To59 = sum(iif(Q1701 == 2 && Q1711_1712 >= 50 && Q1711_1712 < 60, 1, 0)),",
+				"          allModelsFemale_age60Plus = sum(iif(Q1701 == 2 && Q1711_1712 >= 60, 1, 0))) ~> AggregateAllModels",
+				"AggregateAllModels derive(ModelGroup = 'All Models',",
+				"          male_total = allModelsMale_total,",
+				"          female_total = allModelsFemale_total,",
+				"          male_ageUnder29 = allModelsMale_ageUnder29,",
+				"          male_age30To39 = allModelsMale_age30To39,",
+				"          male_age40To49 = allModelsMale_age40To49,",
+				"          male_age50To59 = allModelsMale_age50To59,",
+				"          male_age60Plus = allModelsMale_age60Plus,",
+				"          female_ageUnder29 = allModelsFemale_ageUnder29,",
+				"          female_age30To39 = allModelsFemale_age30To39,",
+				"          female_age40To49 = allModelsFemale_age40To49,",
+				"          female_age50To59 = allModelsFemale_age50To59,",
+				"          female_age60Plus = allModelsFemale_age60Plus) ~> PrepareAllModelsData",
+				"AggregateGenderData, PrepareBaseModelData, PrepareAllModelsData union(byName: true)~> UnionModelData",
+				"UnionModelData derive(male_ageUnder29 = round(toDouble(male_ageUnder29) / toDouble(male_total), 2),",
+				"          male_age30To39 = round(toDouble(male_age30To39) / toDouble(male_total), 2),",
+				"          male_age40To49 = round(toDouble(male_age40To49) / toDouble(male_total), 2),",
+				"          male_age50To59 = round(toDouble(male_age50To59) / toDouble(male_total), 2),",
+				"          male_age60Plus = round(toDouble(male_age60Plus) / toDouble(male_total), 2),",
+				"          female_ageUnder29 = round(toDouble(female_ageUnder29) / toDouble(female_total), 2),",
+				"          female_age30To39 = round(toDouble(female_age30To39) / toDouble(female_total), 2),",
+				"          female_age40To49 = round(toDouble(female_age40To49) / toDouble(female_total), 2),",
+				"          female_age50To59 = round(toDouble(female_age50To59) / toDouble(female_total), 2),",
+				"          female_age60Plus = round(toDouble(female_age60Plus) / toDouble(female_total), 2),",
+				"          MappedMarket = case(",
+				"    Market == 'PGCN', 'CN',",
+				"    Market == 'PCGB', 'UK',",
+				"    Market == 'PCNA', 'US',",
+				"    Market == 'PD', 'DE',",
+				"    Market",
+				")) ~> CalculatePercentages",
+				"CalculatePercentages select(mapColumn(",
+				"          market = MappedMarket,",
+				"          year = Year,",
+				"          model = ModelGroup,",
+				"          male_ageUnder29,",
+				"          male_age30To39,",
+				"          male_age40To49,",
+				"          male_age50To59,",
+				"          male_age60Plus,",
+				"          female_ageUnder29,",
+				"          female_age30To39,",
+				"          female_age40To49,",
+				"          female_age50To59,",
+				"          female_age60Plus",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectFinalColumns",
+				"SelectFinalColumns aggregate(groupBy(dummy = 1),",
+				"     data = collect(@(market = market,",
+				"              year = year,",
+				"              model = model,",
+				"              male_ageUnder29 = male_ageUnder29,",
+				"              male_age30To39 = male_age30To39,",
+				"              male_age40To49 = male_age40To49,",
+				"              male_age50To59 = male_age50To59,",
+				"              male_age60Plus = male_age60Plus,",
+				"              female_ageUnder29 = female_ageUnder29,",
+				"              female_age30To39 = female_age30To39,",
+				"              female_age40To49 = female_age40To49,",
+				"              female_age50To59 = female_age50To59,",
+				"              female_age60Plus = female_age60Plus))) ~> CollectAllData",
+				"CollectAllData select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> FlattenOutput",
+				"FlattenOutput sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:['newCarBuyersAgeChart.json'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> newBuyersAgeData"
 			]
 		}
 	}
