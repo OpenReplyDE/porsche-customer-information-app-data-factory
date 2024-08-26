@@ -1,0 +1,724 @@
+{
+	"name": "DelimitedText1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "240823_CIA-Data_PSS_RawData_2019-2023_00.csv",
+				"container": "test-data"
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ResponseId",
+				"type": "String"
+			},
+			{
+				"name": "EndDate",
+				"type": "String"
+			},
+			{
+				"name": "ED_MODEL_CODE",
+				"type": "String"
+			},
+			{
+				"name": "ED_MODEL_YEAR",
+				"type": "String"
+			},
+			{
+				"name": "1711-1712",
+				"type": "String"
+			},
+			{
+				"name": "Q4601",
+				"type": "String"
+			},
+			{
+				"name": "Q4531",
+				"type": "String"
+			},
+			{
+				"name": "Q4609",
+				"type": "String"
+			},
+			{
+				"name": "Q5386",
+				"type": "String"
+			},
+			{
+				"name": "Q2002",
+				"type": "String"
+			},
+			{
+				"name": "Q2012",
+				"type": "String"
+			},
+			{
+				"name": "170111",
+				"type": "String"
+			},
+			{
+				"name": "1721",
+				"type": "String"
+			},
+			{
+				"name": "1731-1732",
+				"type": "String"
+			},
+			{
+				"name": "V1021",
+				"type": "String"
+			},
+			{
+				"name": "1950",
+				"type": "String"
+			},
+			{
+				"name": "670",
+				"type": "String"
+			},
+			{
+				"name": "671g_1_1_1",
+				"type": "String"
+			},
+			{
+				"name": "671g_1_1_3",
+				"type": "String"
+			},
+			{
+				"name": "671g_1_1_5",
+				"type": "String"
+			},
+			{
+				"name": "711",
+				"type": "String"
+			},
+			{
+				"name": "713g_1_121",
+				"type": "String"
+			},
+			{
+				"name": "713g_1_3",
+				"type": "String"
+			},
+			{
+				"name": "713g_1_5",
+				"type": "String"
+			},
+			{
+				"name": "1961g_1_1_1",
+				"type": "String"
+			},
+			{
+				"name": "1961g_1_1_3",
+				"type": "String"
+			},
+			{
+				"name": "1961g_1_1_5",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3931",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3932",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3933",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3934",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3935",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3936",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3937",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3938",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3939",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3940",
+				"type": "String"
+			},
+			{
+				"name": "3931g_3941",
+				"type": "String"
+			},
+			{
+				"name": "1961g_2_1_1",
+				"type": "String"
+			},
+			{
+				"name": "1961g_3_1_1",
+				"type": "String"
+			},
+			{
+				"name": "ED_AUTH_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "3881g_38813883",
+				"type": "String"
+			},
+			{
+				"name": "2674-2675",
+				"type": "String"
+			},
+			{
+				"name": "1909-1910",
+				"type": "String"
+			},
+			{
+				"name": "Market",
+				"type": "String"
+			},
+			{
+				"name": "Description",
+				"type": "String"
+			},
+			{
+				"name": "Type",
+				"type": "String"
+			},
+			{
+				"name": "Model_Row",
+				"type": "String"
+			},
+			{
+				"name": "Derivate",
+				"type": "String"
+			},
+			{
+				"name": "NBOSegment",
+				"type": "String"
+			},
+			{
+				"name": "Drive",
+				"type": "String"
+			},
+			{
+				"name": "Body",
+				"type": "String"
+			},
+			{
+				"name": "PerformanceLevel",
+				"type": "String"
+			},
+			{
+				"name": "TypeSOP",
+				"type": "String"
+			},
+			{
+				"name": "TypeEOP",
+				"type": "String"
+			},
+			{
+				"name": "Top",
+				"type": "String"
+			},
+			{
+				"name": "Classic",
+				"type": "String"
+			},
+			{
+				"name": "170157",
+				"type": "String"
+			},
+			{
+				"name": "1903-1904",
+				"type": "String"
+			},
+			{
+				"name": "1923-1924",
+				"type": "String"
+			},
+			{
+				"name": "2601-2602",
+				"type": "String"
+			},
+			{
+				"name": "2702-2703",
+				"type": "String"
+			},
+			{
+				"name": "3881g_38843886",
+				"type": "String"
+			},
+			{
+				"name": "3881g_38873889",
+				"type": "String"
+			},
+			{
+				"name": "3881g_38903892",
+				"type": "String"
+			},
+			{
+				"name": "3881g_38933895",
+				"type": "String"
+			},
+			{
+				"name": "3881g_38963898",
+				"type": "String"
+			},
+			{
+				"name": "2051g_1001",
+				"type": "String"
+			},
+			{
+				"name": "2051g_30168",
+				"type": "String"
+			},
+			{
+				"name": "2051g_30269",
+				"type": "String"
+			},
+			{
+				"name": "2051g_101",
+				"type": "String"
+			},
+			{
+				"name": "2063",
+				"type": "String"
+			},
+			{
+				"name": "2051g_901",
+				"type": "String"
+			},
+			{
+				"name": "2051g_90273",
+				"type": "String"
+			},
+			{
+				"name": "2051g_406",
+				"type": "String"
+			},
+			{
+				"name": "2051g_30375",
+				"type": "String"
+			},
+			{
+				"name": "2051g_60276",
+				"type": "String"
+			},
+			{
+				"name": "2072",
+				"type": "String"
+			},
+			{
+				"name": "2073",
+				"type": "String"
+			},
+			{
+				"name": "2051g_604",
+				"type": "String"
+			},
+			{
+				"name": "2075",
+				"type": "String"
+			},
+			{
+				"name": "2051g_90381",
+				"type": "String"
+			},
+			{
+				"name": "2051g_904",
+				"type": "String"
+			},
+			{
+				"name": "2051g_50183",
+				"type": "String"
+			},
+			{
+				"name": "2051g_41584",
+				"type": "String"
+			},
+			{
+				"name": "208285",
+				"type": "String"
+			},
+			{
+				"name": "2083",
+				"type": "String"
+			},
+			{
+				"name": "208487",
+				"type": "String"
+			},
+			{
+				"name": "209088",
+				"type": "String"
+			},
+			{
+				"name": "209289",
+				"type": "String"
+			},
+			{
+				"name": "2093",
+				"type": "String"
+			},
+			{
+				"name": "2096",
+				"type": "String"
+			},
+			{
+				"name": "2051g_1003",
+				"type": "String"
+			},
+			{
+				"name": "2051g_50393",
+				"type": "String"
+			},
+			{
+				"name": "210294",
+				"type": "String"
+			},
+			{
+				"name": "2051g_1004",
+				"type": "String"
+			},
+			{
+				"name": "2110",
+				"type": "String"
+			},
+			{
+				"name": "211197",
+				"type": "String"
+			},
+			{
+				"name": "211498",
+				"type": "String"
+			},
+			{
+				"name": "2115",
+				"type": "String"
+			},
+			{
+				"name": "2051g_413",
+				"type": "String"
+			},
+			{
+				"name": "2117",
+				"type": "String"
+			},
+			{
+				"name": "2051g_414102",
+				"type": "String"
+			},
+			{
+				"name": "2119",
+				"type": "String"
+			},
+			{
+				"name": "2051g_309104",
+				"type": "String"
+			},
+			{
+				"name": "2122105",
+				"type": "String"
+			},
+			{
+				"name": "2124",
+				"type": "String"
+			},
+			{
+				"name": "2051g_611",
+				"type": "String"
+			},
+			{
+				"name": "2128",
+				"type": "String"
+			},
+			{
+				"name": "2129",
+				"type": "String"
+			},
+			{
+				"name": "2051g_419110",
+				"type": "String"
+			},
+			{
+				"name": "2051g_1006",
+				"type": "String"
+			},
+			{
+				"name": "2051g_804112",
+				"type": "String"
+			},
+			{
+				"name": "2051g_805",
+				"type": "String"
+			},
+			{
+				"name": "2051g_803",
+				"type": "String"
+			},
+			{
+				"name": "2136",
+				"type": "String"
+			},
+			{
+				"name": "2138116",
+				"type": "String"
+			},
+			{
+				"name": "2141",
+				"type": "String"
+			},
+			{
+				"name": "2142",
+				"type": "String"
+			},
+			{
+				"name": "2051g_703",
+				"type": "String"
+			},
+			{
+				"name": "2051g_1002",
+				"type": "String"
+			},
+			{
+				"name": "2145",
+				"type": "String"
+			},
+			{
+				"name": "2146",
+				"type": "String"
+			},
+			{
+				"name": "2147",
+				"type": "String"
+			},
+			{
+				"name": "2154",
+				"type": "String"
+			},
+			{
+				"name": "2051g_301125",
+				"type": "String"
+			},
+			{
+				"name": "2051g_403",
+				"type": "String"
+			},
+			{
+				"name": "2051g_404",
+				"type": "String"
+			},
+			{
+				"name": "2051g_302128",
+				"type": "String"
+			},
+			{
+				"name": "2051g_102",
+				"type": "String"
+			},
+			{
+				"name": "2102130",
+				"type": "String"
+			},
+			{
+				"name": "2051g_103",
+				"type": "String"
+			},
+			{
+				"name": "2051g_902132",
+				"type": "String"
+			},
+			{
+				"name": "2051g_303133",
+				"type": "String"
+			},
+			{
+				"name": "2051g_602134",
+				"type": "String"
+			},
+			{
+				"name": "2051g_304",
+				"type": "String"
+			},
+			{
+				"name": "2090136",
+				"type": "String"
+			},
+			{
+				"name": "2053",
+				"type": "String"
+			},
+			{
+				"name": "2051g_903138",
+				"type": "String"
+			},
+			{
+				"name": "2135",
+				"type": "String"
+			},
+			{
+				"name": "2092140",
+				"type": "String"
+			},
+			{
+				"name": "2080",
+				"type": "String"
+			},
+			{
+				"name": "2082142",
+				"type": "String"
+			},
+			{
+				"name": "2084143",
+				"type": "String"
+			},
+			{
+				"name": "2087",
+				"type": "String"
+			},
+			{
+				"name": "2088",
+				"type": "String"
+			},
+			{
+				"name": "2091",
+				"type": "String"
+			},
+			{
+				"name": "2051g_503147",
+				"type": "String"
+			},
+			{
+				"name": "2100",
+				"type": "String"
+			},
+			{
+				"name": "2101",
+				"type": "String"
+			},
+			{
+				"name": "2104",
+				"type": "String"
+			},
+			{
+				"name": "2105",
+				"type": "String"
+			},
+			{
+				"name": "2106",
+				"type": "String"
+			},
+			{
+				"name": "2111153",
+				"type": "String"
+			},
+			{
+				"name": "2114154",
+				"type": "String"
+			},
+			{
+				"name": "2051g_502",
+				"type": "String"
+			},
+			{
+				"name": "2051g_414156",
+				"type": "String"
+			},
+			{
+				"name": "2051g_309157",
+				"type": "String"
+			},
+			{
+				"name": "2120",
+				"type": "String"
+			},
+			{
+				"name": "2051g_415159",
+				"type": "String"
+			},
+			{
+				"name": "2122160",
+				"type": "String"
+			},
+			{
+				"name": "2051g_310",
+				"type": "String"
+			},
+			{
+				"name": "2051g_419162",
+				"type": "String"
+			},
+			{
+				"name": "2051g_804163",
+				"type": "String"
+			},
+			{
+				"name": "2054",
+				"type": "String"
+			},
+			{
+				"name": "2051g_501165",
+				"type": "String"
+			},
+			{
+				"name": "2051g_504",
+				"type": "String"
+			},
+			{
+				"name": "2051g_416",
+				"type": "String"
+			},
+			{
+				"name": "2051g_417",
+				"type": "String"
+			},
+			{
+				"name": "2138169",
+				"type": "String"
+			},
+			{
+				"name": "2051g_1102_TEXT",
+				"type": "String"
+			},
+			{
+				"name": "Q4970",
+				"type": "String"
+			},
+			{
+				"name": "2051g_1101",
+				"type": "String"
+			},
+			{
+				"name": "713g_1_4",
+				"type": "String"
+			},
+			{
+				"name": "713g_1_1174",
+				"type": "String"
+			}
+		]
+	}
+}
