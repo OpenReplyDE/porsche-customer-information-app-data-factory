@@ -202,7 +202,7 @@
 				"!isNull(Q1701) &&",
 				"!isNull(Q1711_1712) &&",
 				"((Market == 'PCNA' && Q2002 == 5) || ",
-				" (Market != 'PCNA' && {711} == '5'))) ~> FilterValidData",
+				" (Market != 'PCNA' && {711} == '3'))) ~> FilterValidData",
 				"FilterValidData aggregate(groupBy(Market,",
 				"          Year,",
 				"          ModelGroup),",
