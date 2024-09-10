@@ -277,7 +277,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> SelectFinalColumns",
-				"SelectFinalColumns aggregate(groupBy(market),",
+				"SelectFinalColumns aggregate(groupBy(dummy = 1),",
 				"     data = collect(@(",
 				"          market = market,",
 				"          year = year,",
