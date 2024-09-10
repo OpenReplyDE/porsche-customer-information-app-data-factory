@@ -12,7 +12,15 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SelectRelevantColumns"
@@ -22,6 +30,9 @@
 				},
 				{
 					"name": "DeriveKeyColumn"
+				},
+				{
+					"name": "FilterUnknownKeys"
 				},
 				{
 					"name": "AggregateData"
@@ -216,7 +227,8 @@
 				"        ),",
 				"        'unknown'",
 				"    )) ~> DeriveKeyColumn",
-				"DeriveKeyColumn aggregate(groupBy(MappedMarket,",
+				"DeriveKeyColumn filter(Key != 'unknown') ~> FilterUnknownKeys",
+				"FilterUnknownKeys aggregate(groupBy(MappedMarket,",
 				"          Year,",
 				"          Key,",
 				"          Variant,",
@@ -233,7 +245,18 @@
 				"          model = BaseModel",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectFinalColumns"
+				"     skipDuplicateMapOutputs: false) ~> SelectFinalColumns",
+				"SelectFinalColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:['occupationChart.json'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
