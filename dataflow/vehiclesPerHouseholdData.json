@@ -18,7 +18,7 @@
 						"referenceName": "AzureDataLakeStorage1",
 						"type": "LinkedServiceReference"
 					},
-					"name": "sink1"
+					"name": "sink2"
 				}
 			],
 			"transformations": [
@@ -42,6 +42,12 @@
 				},
 				{
 					"name": "PrepareBaseModelData"
+				},
+				{
+					"name": "AggregateAllModelsData"
+				},
+				{
+					"name": "PrepareAllModelsData"
 				},
 				{
 					"name": "UnionModelData"
@@ -279,7 +285,40 @@
 				"          female_vehicle5 = round(toDouble(female_vehicle5) / toDouble(female_total), 2),",
 				"          female_vehicle6 = round(toDouble(female_vehicle6) / toDouble(female_total), 2),",
 				"          female_vehicleMoreThan6 = round(toDouble(female_vehicleMoreThan6) / toDouble(female_total), 2)) ~> PrepareBaseModelData",
-				"CalculatePercentages, PrepareBaseModelData union(byName: true)~> UnionModelData",
+				"FilterValidData aggregate(groupBy(Market,",
+				"          Year),",
+				"     male_total = countIf(Gender == 'male'),",
+				"          female_total = countIf(Gender == 'female'),",
+				"          male_vehicle1 = countIf(Gender == 'male' && VehicleCount == 'vehicle1'),",
+				"          male_vehicle2 = countIf(Gender == 'male' && VehicleCount == 'vehicle2'),",
+				"          male_vehicle3 = countIf(Gender == 'male' && VehicleCount == 'vehicle3'),",
+				"          male_vehicle4 = countIf(Gender == 'male' && VehicleCount == 'vehicle4'),",
+				"          male_vehicle5 = countIf(Gender == 'male' && VehicleCount == 'vehicle5'),",
+				"          male_vehicle6 = countIf(Gender == 'male' && VehicleCount == 'vehicle6'),",
+				"          male_vehicleMoreThan6 = countIf(Gender == 'male' && VehicleCount == 'vehicleMoreThan6'),",
+				"          female_vehicle1 = countIf(Gender == 'female' && VehicleCount == 'vehicle1'),",
+				"          female_vehicle2 = countIf(Gender == 'female' && VehicleCount == 'vehicle2'),",
+				"          female_vehicle3 = countIf(Gender == 'female' && VehicleCount == 'vehicle3'),",
+				"          female_vehicle4 = countIf(Gender == 'female' && VehicleCount == 'vehicle4'),",
+				"          female_vehicle5 = countIf(Gender == 'female' && VehicleCount == 'vehicle5'),",
+				"          female_vehicle6 = countIf(Gender == 'female' && VehicleCount == 'vehicle6'),",
+				"          female_vehicleMoreThan6 = countIf(Gender == 'female' && VehicleCount == 'vehicleMoreThan6')) ~> AggregateAllModelsData",
+				"AggregateAllModelsData derive(ModelGroup = 'All Models',",
+				"          male_vehicle1 = round(toDouble(male_vehicle1) / toDouble(male_total), 2),",
+				"          male_vehicle2 = round(toDouble(male_vehicle2) / toDouble(male_total), 2),",
+				"          male_vehicle3 = round(toDouble(male_vehicle3) / toDouble(male_total), 2),",
+				"          male_vehicle4 = round(toDouble(male_vehicle4) / toDouble(male_total), 2),",
+				"          male_vehicle5 = round(toDouble(male_vehicle5) / toDouble(male_total), 2),",
+				"          male_vehicle6 = round(toDouble(male_vehicle6) / toDouble(male_total), 2),",
+				"          male_vehicleMoreThan6 = round(toDouble(male_vehicleMoreThan6) / toDouble(male_total), 2),",
+				"          female_vehicle1 = round(toDouble(female_vehicle1) / toDouble(female_total), 2),",
+				"          female_vehicle2 = round(toDouble(female_vehicle2) / toDouble(female_total), 2),",
+				"          female_vehicle3 = round(toDouble(female_vehicle3) / toDouble(female_total), 2),",
+				"          female_vehicle4 = round(toDouble(female_vehicle4) / toDouble(female_total), 2),",
+				"          female_vehicle5 = round(toDouble(female_vehicle5) / toDouble(female_total), 2),",
+				"          female_vehicle6 = round(toDouble(female_vehicle6) / toDouble(female_total), 2),",
+				"          female_vehicleMoreThan6 = round(toDouble(female_vehicleMoreThan6) / toDouble(female_total), 2)) ~> PrepareAllModelsData",
+				"CalculatePercentages, PrepareBaseModelData, PrepareAllModelsData union(byName: true)~> UnionModelData",
 				"UnionModelData select(mapColumn(",
 				"          market = Market,",
 				"          year = Year,",
@@ -334,7 +373,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sink1"
+				"     partitionBy('hash', 1)) ~> sink2"
 			]
 		}
 	}
