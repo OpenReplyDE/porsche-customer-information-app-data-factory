@@ -29,6 +29,9 @@
 					"name": "DeriveBasicColumns"
 				},
 				{
+					"name": "AdjustBaseModel"
+				},
+				{
 					"name": "DeriveKeyColumn"
 				},
 				{
@@ -159,13 +162,14 @@
 				"          Variant = iif(isNull(Derivate) || Derivate == '' || Derivate == Model_Row, 'Basic', ",
 				"                  replace(Derivate, trim(split(Model_Row, ' ')[1]) + ' ', '')),",
 				"          MappedMarket = case(",
-				"        Market == 'PGCN', 'CN',",
-				"        Market == 'PCGB', 'UK',",
-				"        Market == 'PCNA', 'US',",
-				"        Market == 'PD', 'DE',",
-				"        Market",
+				"       Market == 'PGCN', 'CN',",
+				"       Market == 'PCGB', 'UK',",
+				"       Market == 'PCNA', 'US',",
+				"       Market == 'PD', 'DE',",
+				"       Market",
 				"    )) ~> DeriveBasicColumns",
-				"DeriveBasicColumns derive(Key = case(",
+				"DeriveBasicColumns derive(BaseModel = iif(regexMatch(BaseModel, '^[0-9]+$'), '_' + BaseModel, BaseModel)) ~> AdjustBaseModel",
+				"AdjustBaseModel derive(Key = case(",
 				"        MappedMarket == 'US', case(",
 				"            Q4609 == 1, 'Employed full-time (30 hrs a week or more)',",
 				"            Q4609 == 2, 'Employed part-time (less than 30 hrs a week)',",
@@ -231,7 +235,7 @@
 				"        ),",
 				"        'Unknown'",
 				"    )) ~> DeriveKeyColumn",
-				"DeriveKeyColumn filter(Key != 'unknown') ~> FilterUnknownKeys",
+				"DeriveKeyColumn filter(Key != 'Unknown') ~> FilterUnknownKeys",
 				"FilterUnknownKeys aggregate(groupBy(MappedMarket,",
 				"          Year,",
 				"          Key,",
