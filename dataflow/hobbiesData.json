@@ -19,6 +19,21 @@
 				},
 				{
 					"name": "AdjustBaseModel"
+				},
+				{
+					"name": "DeriveKeyColumn"
+				},
+				{
+					"name": "FilterHobbies"
+				},
+				{
+					"name": "AggregateData"
+				},
+				{
+					"name": "SelectFinalColumns"
+				},
+				{
+					"name": "WrapInDataObject"
 				}
 			],
 			"scriptLines": [
@@ -213,7 +228,84 @@
 				"        Market == 'PD', 'DE',",
 				"        Market",
 				"    )) ~> DeriveBasicColumns",
-				"DeriveBasicColumns derive(BaseModel = iif(regexMatch(BaseModel, '^[0-9]+$'), '_' + BaseModel, BaseModel)) ~> AdjustBaseModel"
+				"DeriveBasicColumns derive(BaseModel = iif(regexMatch(BaseModel, '^[0-9]+$'), '_' + BaseModel, BaseModel)) ~> AdjustBaseModel",
+				"AdjustBaseModel derive(Key = case(",
+				"    {2051g_301125} == 1, 'Aviation',",
+				"    {2051g_403} == 1, 'Baseball',",
+				"    {2051g_404} == 1, 'Basketball',",
+				"    {2051g_302128} == 1, 'Boating',",
+				"    {2051g_102} == 1, 'Cars Driving',",
+				"    {Q2012} == 1, 'Motorsport',",
+				"    {2051g_103} == 1, 'Cars Restoring',",
+				"    {2051g_902132} == 1, 'Cooking',",
+				"    {2051g_303133} == 1, 'Cycling',",
+				"    {2051g_602134} == 1, 'Dancing',",
+				"    {2051g_304} == 1, 'Diving',",
+				"    {2090} == 1, 'Horse Riding',",
+				"    {2053} == 1, 'Art Collection',",
+				"    {2051g_903138} == 1, 'Fine Dining',",
+				"    {2135} == 1, 'Fine Wine',",
+				"    {2092} == 1, 'Fishing',",
+				"    {2080} == 1, 'Football',",
+				"    {2082} == 1, 'Gardening',",
+				"    {2084} == 1, 'Golf',",
+				"    {2087} == 1, 'Hiking',",
+				"    {2088} == 1, 'Hockey',",
+				"    {2091} == 1, 'Hunting',",
+				"    {2051g_503} == 1, 'Martial Arts',",
+				"    {2100} == 1, 'Motor Sports Watching',",
+				"    {2101} == 1, 'Motorbikes',",
+				"    {2104} == 1, 'Music Listening',",
+				"    {2105} == 1, 'Music Playing',",
+				"    {2106} == 1, 'Pets',",
+				"    {2111} == 1, 'Photography',",
+				"    {2114} == 1, 'Reading',",
+				"    {2051g_502} == 1, 'Running',",
+				"    {2051g_414} == 1, 'Shooting',",
+				"    {2051g_309} == 1, 'Skiing',",
+				"    {2120} == 1, 'Water Skiing',",
+				"    {2051g_415} == 1, 'Soccer',",
+				"    {2122} == 1, 'Family Time',",
+				"    {2051g_310} == 1, 'Surfing',",
+				"    {2051g_419} == 1, 'Tennis',",
+				"    {2051g_804} == 1, 'Traveling',",
+				"    {2054} == 1, 'Arts and Crafts',",
+				"    {2051g_501} == 1, 'Fitness',",
+				"    {2051g_504} == 1, 'Yoga',",
+				"    {2051g_416} == 1, 'Squash',",
+				"    {2051g_417} == 1, 'Swimming',",
+				"    {2138} == 1, 'Other Sports',",
+				"    'No Hobby'",
+				")) ~> DeriveKeyColumn",
+				"DeriveKeyColumn filter(Key != 'No Hobby') ~> FilterHobbies",
+				"FilterHobbies aggregate(groupBy(MappedMarket,",
+				"          Year,",
+				"          Key,",
+				"          Variant,",
+				"          BaseModel),",
+				"     male = sum(iif({170111} == 1, 1, 0)),",
+				"          female = sum(iif({170111} == 2, 1, 0))) ~> AggregateData",
+				"AggregateData select(mapColumn(",
+				"          market = MappedMarket,",
+				"          year = Year,",
+				"          key = Key,",
+				"          male,",
+				"          female,",
+				"          variant = Variant,",
+				"          model = BaseModel",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectFinalColumns",
+				"SelectFinalColumns aggregate(groupBy(dummy = 1),",
+				"     data = collect(@(",
+				"        market = market,",
+				"        year = year,",
+				"        key = key,",
+				"        male = male,",
+				"        female = female,",
+				"        variant = variant,",
+				"        model = model",
+				"    ))) ~> WrapInDataObject"
 			]
 		}
 	}
