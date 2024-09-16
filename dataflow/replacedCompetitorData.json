@@ -41,6 +41,9 @@
 					"name": "MapMarkets"
 				},
 				{
+					"name": "SplitModelVariant"
+				},
+				{
 					"name": "SelectFinalColumns"
 				},
 				{
@@ -246,7 +249,8 @@
 				"ExtractModelInfo filter(!isNull(Key) && ",
 				"    !isNull(Year) && ",
 				"    !isNull(Market) &&",
-				"    !isNull(Q1701)) ~> FilterValidData",
+				"    !isNull(Q1701) &&",
+				"    Key != 'Porsche') ~> FilterValidData",
 				"FilterValidData derive(Gender = case(",
 				"        Q1701 == '1', 'male',",
 				"        Q1701 == '2', 'female',",
@@ -266,7 +270,9 @@
 				"        Market == 'PD', 'DE',",
 				"        Market",
 				"    )) ~> MapMarkets",
-				"MapMarkets select(mapColumn(",
+				"MapMarkets derive(Model = trim(split(Variant, ' ')[1]),",
+				"          Variant = trim(substring(Variant, length(split(Variant, ' ')[1]) + 1))) ~> SplitModelVariant",
+				"SplitModelVariant select(mapColumn(",
 				"          market = MappedMarket,",
 				"          year = Year,",
 				"          key = Key,",
