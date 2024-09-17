@@ -436,6 +436,9 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          data",
+				"     ),",
 				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
