@@ -44,6 +44,15 @@
 					"name": "SelectFinalColumns"
 				},
 				{
+					"name": "AggregateAllModels"
+				},
+				{
+					"name": "FormatAllModels"
+				},
+				{
+					"name": "UnionWithAllModels"
+				},
+				{
 					"name": "CollectIntoArray"
 				}
 			],
@@ -243,15 +252,15 @@
 				"          Key = trim(Q713g_1_1),",
 				"          Model = trim(split(Model_Row, ' ')[1]),",
 				"          Variant = iif(isNull(Derivate) || Derivate == '' || Derivate == Model_Row,",
-				"                    'Basic',",
-				"                    replace(Derivate, trim(split(Model_Row, ' ')[1]) + ' ', '')),",
+				"            'Basic',",
+				"            trim(replace(Derivate, Model_Row + ' ', ''))),",
 				"          MappedMarket = case(",
-				"               Market == 'PGCN', 'CN',",
-				"               Market == 'PCGB', 'UK',",
-				"               Market == 'PCNA', 'US',",
-				"               Market == 'PD', 'DE',",
-				"               Market",
-				"          )) ~> DeriveColumns",
+				"        Market == 'PGCN', 'CN',",
+				"        Market == 'PCGB', 'UK',",
+				"        Market == 'PCNA', 'US',",
+				"        Market == 'PD', 'DE',",
+				"        Market",
+				"    )) ~> DeriveColumns",
 				"DeriveColumns derive(Model = iif(regexMatch(Model, '^[0-9]+$'), '_' + Model, Model)) ~> AdjustModelName",
 				"AdjustModelName filter(!isNull(Key) && ",
 				"     !isNull(Year) && ",
@@ -280,7 +289,17 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> SelectFinalColumns",
-				"SelectFinalColumns aggregate(groupBy(dummy = 1),",
+				"SelectFinalColumns aggregate(groupBy(market,",
+				"          year),",
+				"     all_female = sum(female),",
+				"          all_male = sum(male)) ~> AggregateAllModels",
+				"AggregateAllModels derive(key = 'All Models',",
+				"          female = all_female,",
+				"          male = all_male,",
+				"          variant = 'All',",
+				"          model = 'All Models') ~> FormatAllModels",
+				"SelectFinalColumns, FormatAllModels union(byName: true)~> UnionWithAllModels",
+				"UnionWithAllModels aggregate(groupBy(dummy = 1),",
 				"     data = collect(@(",
 				"          market,",
 				"          year,",
