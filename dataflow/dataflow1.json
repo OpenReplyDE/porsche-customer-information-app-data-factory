@@ -1,0 +1,55 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Excel1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "MapDrifted1",
+					"description": "Creates an explicit mapping for each drifted column"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {_col0_} as string,",
+				"          {_col1_} as string,",
+				"          {_col2_} as string,",
+				"          {_col3_} as string,",
+				"          {_col4_} as string,",
+				"          {_col5_} as string,",
+				"          {_col6_} as string,",
+				"          {_col7_} as string,",
+				"          {_col8_} as string,",
+				"          {_col9_} as string,",
+				"          {_col10_} as string,",
+				"          {_col11_} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive({_col0_} = toString(byName('_col0_')),",
+				"          {_col1_} = toString(byName('_col1_')),",
+				"          {_col2_} = toString(byName('_col2_')),",
+				"          {_col3_} = toString(byName('_col3_')),",
+				"          {_col4_} = toString(byName('_col4_')),",
+				"          {_col5_} = toString(byName('_col5_')),",
+				"          {_col6_} = toString(byName('_col6_')),",
+				"          {_col7_} = toString(byName('_col7_')),",
+				"          {_col8_} = toString(byName('_col8_')),",
+				"          {_col9_} = toString(byName('_col9_')),",
+				"          {_col10_} = toString(byName('_col10_')),",
+				"          {_col11_} = toString(byName('_col11_'))) ~> MapDrifted1"
+			]
+		}
+	}
+}
