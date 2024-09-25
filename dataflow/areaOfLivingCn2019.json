@@ -23,25 +23,25 @@
 			],
 			"transformations": [
 				{
-					"name": "SplitModelAndGender"
+					"name": "SplitModelTypes"
 				},
 				{
 					"name": "DeriveGenderColumns"
 				},
 				{
-					"name": "DeriveModelColumns"
+					"name": "DeriveEngineColumns"
 				},
 				{
 					"name": "SelectGenderColumns"
 				},
 				{
-					"name": "SelectModelColumns"
+					"name": "SelectEngineColumns"
 				},
 				{
 					"name": "DeriveGenderKeys"
 				},
 				{
-					"name": "DeriveModelKeys"
+					"name": "DeriveEngineKeys"
 				},
 				{
 					"name": "SelectVillageGender"
@@ -56,22 +56,22 @@
 					"name": "SelectCityGender"
 				},
 				{
-					"name": "SelectVillageModel"
+					"name": "SelectVillageEngine"
 				},
 				{
-					"name": "SelectSuburbsModel"
+					"name": "SelectSuburbsEngine"
 				},
 				{
-					"name": "SelectTownModel"
+					"name": "SelectTownEngine"
 				},
 				{
-					"name": "SelectCityModel"
+					"name": "SelectCityEngine"
 				},
 				{
 					"name": "UnionGenderData"
 				},
 				{
-					"name": "UnionModelData"
+					"name": "UnionEngineData"
 				},
 				{
 					"name": "UnionAllData"
@@ -101,25 +101,22 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
 				"source1 split(GroupType == 'Model/Gender',",
-				"     GroupType == 'Model',",
-				"     disjoint: false) ~> SplitModelAndGender@(ModelGender, ModelOnly)",
-				"SplitModelAndGender@ModelGender derive(market = 'CN',",
+				"     GroupType == 'Model/Engine',",
+				"     disjoint: false) ~> SplitModelTypes@(ModelGender, ModelEngine)",
+				"SplitModelTypes@ModelGender derive(market = 'CN',",
 				"          year = '2019',",
-				"          variant = iif(GroupName == 'Porsche', '', 'All'),",
+				"          variant = 'All',",
 				"          model = iif(GroupName == 'Porsche/Female' || GroupName == 'Porsche/Male', 'All Models',",
-				"                iif(startsWith(split(GroupName, '/')[1], '7') || startsWith(split(GroupName, '/')[1], '9'),",
-				"                    concat('_', split(GroupName, '/')[1]),",
-				"                    split(GroupName, '/')[1])),",
+				"             iif(startsWith(split(GroupName, '/')[1], '7') || startsWith(split(GroupName, '/')[1], '9'),",
+				"                concat('_', split(GroupName, '/')[1]),",
+				"                split(GroupName, '/')[1])),",
 				"          gender = iif(endsWith(GroupName, '/Female'), 'female', 'male')) ~> DeriveGenderColumns",
-				"SplitModelAndGender@ModelOnly derive(market = 'CN',",
+				"SplitModelTypes@ModelEngine derive(market = 'CN',",
 				"          year = '2019',",
-				"          variant = iif(GroupName == 'Porsche', '', ",
-				"                  iif(GroupType == 'Model/Engine', trim(split(GroupName, '/')[2]), ",
-				"                      GroupName)),",
-				"          model = iif(GroupName == 'Porsche', 'All Models',",
-				"                iif(startsWith(split(GroupName, '/')[1], '7') || startsWith(split(GroupName, '/')[1], '9'),",
-				"                    concat('_', split(GroupName, '/')[1]),",
-				"                    split(GroupName, '/')[1]))) ~> DeriveModelColumns",
+				"          variant = trim(split(GroupName, '/')[2]),",
+				"          model = iif(startsWith(split(GroupName, '/')[1], '7') || startsWith(split(GroupName, '/')[1], '9'),",
+				"        concat('_', split(GroupName, '/')[1]),",
+				"        split(GroupName, '/')[1])) ~> DeriveEngineColumns",
 				"DeriveGenderColumns select(mapColumn(",
 				"          market,",
 				"          year,",
@@ -133,7 +130,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> SelectGenderColumns",
-				"DeriveModelColumns select(mapColumn(",
+				"DeriveEngineColumns select(mapColumn(",
 				"          market,",
 				"          year,",
 				"          variant,",
@@ -144,7 +141,7 @@
 				"          City = T1",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectModelColumns",
+				"     skipDuplicateMapOutputs: false) ~> SelectEngineColumns",
 				"SelectGenderColumns derive(Village_key = 'Village',",
 				"          Village_value = Village,",
 				"          Suburbs_key = 'Suburbs',",
@@ -153,14 +150,14 @@
 				"          Town_value = Town,",
 				"          City_key = 'City',",
 				"          City_value = City) ~> DeriveGenderKeys",
-				"SelectModelColumns derive(Village_key = 'Village',",
+				"SelectEngineColumns derive(Village_key = 'Village',",
 				"          Village_value = Village,",
 				"          Suburbs_key = 'Suburbs',",
 				"          Suburbs_value = Suburbs,",
 				"          Town_key = 'Town',",
 				"          Town_value = Town,",
 				"          City_key = 'City',",
-				"          City_value = City) ~> DeriveModelKeys",
+				"          City_value = City) ~> DeriveEngineKeys",
 				"DeriveGenderKeys select(mapColumn(",
 				"          market,",
 				"          year,",
@@ -205,7 +202,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> SelectCityGender",
-				"DeriveModelKeys select(mapColumn(",
+				"DeriveEngineKeys select(mapColumn(",
 				"          market,",
 				"          year,",
 				"          variant,",
@@ -214,8 +211,8 @@
 				"          value = Village_value",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectVillageModel",
-				"DeriveModelKeys select(mapColumn(",
+				"     skipDuplicateMapOutputs: false) ~> SelectVillageEngine",
+				"DeriveEngineKeys select(mapColumn(",
 				"          market,",
 				"          year,",
 				"          variant,",
@@ -224,8 +221,8 @@
 				"          value = Suburbs_value",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectSuburbsModel",
-				"DeriveModelKeys select(mapColumn(",
+				"     skipDuplicateMapOutputs: false) ~> SelectSuburbsEngine",
+				"DeriveEngineKeys select(mapColumn(",
 				"          market,",
 				"          year,",
 				"          variant,",
@@ -234,8 +231,8 @@
 				"          value = Town_value",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectTownModel",
-				"DeriveModelKeys select(mapColumn(",
+				"     skipDuplicateMapOutputs: false) ~> SelectTownEngine",
+				"DeriveEngineKeys select(mapColumn(",
 				"          market,",
 				"          year,",
 				"          variant,",
@@ -244,10 +241,10 @@
 				"          value = City_value",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectCityModel",
+				"     skipDuplicateMapOutputs: false) ~> SelectCityEngine",
 				"SelectVillageGender, SelectSuburbsGender, SelectTownGender, SelectCityGender union(byName: true)~> UnionGenderData",
-				"SelectVillageModel, SelectSuburbsModel, SelectTownModel, SelectCityModel union(byName: true)~> UnionModelData",
-				"UnionGenderData, UnionModelData union(byName: true)~> UnionAllData",
+				"SelectVillageEngine, SelectSuburbsEngine, SelectTownEngine, SelectCityEngine union(byName: true)~> UnionEngineData",
+				"UnionGenderData, UnionEngineData union(byName: true)~> UnionAllData",
 				"UnionAllData derive(data = @(market, year, key, value, variant, model, gender)) ~> CreateDataArray",
 				"CreateDataArray aggregate(groupBy(dummy = 1),",
 				"     data = collect(data)) ~> AggregateToArray",
@@ -260,11 +257,13 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
+				"     partitionFileNames:['cityTypeChartCN.json'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
