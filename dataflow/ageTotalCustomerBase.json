@@ -1,0 +1,112 @@
+{
+	"name": "ageTotalCustomerBase",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CAP_CN_2019",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "SplitModelTypes"
+				},
+				{
+					"name": "DeriveGenderColumns"
+				},
+				{
+					"name": "DeriveEngineColumns"
+				},
+				{
+					"name": "SelectGenderColumns"
+				},
+				{
+					"name": "SelectEngineColumns"
+				},
+				{
+					"name": "DeriveGenderKeys"
+				},
+				{
+					"name": "DeriveEngineKeys"
+				},
+				{
+					"name": "UnionAllData"
+				},
+				{
+					"name": "CreateDataArray"
+				},
+				{
+					"name": "AggregateToArray"
+				},
+				{
+					"name": "SelectDataArray"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          AverageExistingCustomerAge as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(GroupType == 'Model/Gender',",
+				"     GroupType == 'Model/Engine' || GroupType == 'Model/Body',",
+				"     disjoint: false) ~> SplitModelTypes@(ModelGender, ModelEngine)",
+				"SplitModelTypes@ModelGender derive(market = 'CN',",
+				"          year = '2019',",
+				"          variant = 'All',",
+				"          model = iif(GroupName == 'Porsche/Female' || GroupName == 'Porsche/Male', 'All Models',",
+				"             iif(startsWith(split(GroupName, '/')[1], '7') || startsWith(split(GroupName, '/')[1], '9'),",
+				"                concat('_', split(GroupName, '/')[1]),",
+				"                split(GroupName, '/')[1])),",
+				"          gender = iif(endsWith(GroupName, '/Female'), 'female', 'male'),",
+				"          value = AverageExistingCustomerAge) ~> DeriveGenderColumns",
+				"SplitModelTypes@ModelEngine derive(market = 'CN',",
+				"          year = '2019',",
+				"          variant = trim(split(GroupName, '/')[2]),",
+				"          model = iif(startsWith(split(GroupName, '/')[1], '7') || startsWith(split(GroupName, '/')[1], '9'),",
+				"        concat('_', split(GroupName, '/')[1]),",
+				"        split(GroupName, '/')[1]),",
+				"          value = AverageExistingCustomerAge) ~> DeriveEngineColumns",
+				"DeriveGenderColumns select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          gender,",
+				"          value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectGenderColumns",
+				"DeriveEngineColumns select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectEngineColumns",
+				"SelectGenderColumns derive(key = 'AverageExistingCustomerAge') ~> DeriveGenderKeys",
+				"SelectEngineColumns derive(key = 'AverageExistingCustomerAge') ~> DeriveEngineKeys",
+				"DeriveGenderKeys, DeriveEngineKeys union(byName: true)~> UnionAllData",
+				"UnionAllData derive(data = @(market, year, key, value, variant, model, gender)) ~> CreateDataArray",
+				"CreateDataArray aggregate(groupBy(dummy = 1),",
+				"     data = collect(data)) ~> AggregateToArray",
+				"AggregateToArray select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectDataArray"
+			]
+		}
+	}
+}
