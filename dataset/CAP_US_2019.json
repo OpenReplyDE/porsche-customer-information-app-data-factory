@@ -1,0 +1,28 @@
+{
+	"name": "CAP_US_2019",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "C@P_USA_2019.csv",
+				"container": "test-data"
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "GroupName;GroupType;AverageExistingCustomerAge;ExistingCustomerAge=0-30;ExistingCustomerAge=30-50;ExistingCustomerAge=50-100;ShareOfMen;ShareOfWomen;AverageHoldingPeriod;AverageNumberOfPorscheInPossession;PorscheInPossession=1;PorscheInPossession=2;PorscheInPossession=3;PorscheInPossession>=4;FirstTimeBuyerRate;ChurnRate;ConquestRate;MeanKmPerYear;kmPerYear=0;kmPerYear=500;kmPerYear=1000;kmPerYear=1500;kmPerYear=2000;kmPerYear=2500;kmPerYear=3000;kmPerYear=3500;kmPerYear=4000;kmPerYear=4500;kmPerYear=5000;kmPerYear=5500;kmPerYear=6000;kmPerYear=6500;kmPerYear=7000;kmPerYear=7500;kmPerYear=8000;kmPerYear=8500;kmPerYear=9000;kmPerYear=9500;kmPerYear=10000;kmPerYear=10500;kmPerYear=11000;kmPerYear=11500;kmPerYear=12000;kmPerYear=12500;kmPerYear=13000;kmPerYear=13500;kmPerYear=14000;kmPerYear=14500;kmPerYear=15000;kmPerYear=15500;kmPerYear=16000;kmPerYear=16500;kmPerYear=17000;kmPerYear=17500;kmPerYear=18000;kmPerYear=18500;kmPerYear=19000;kmPerYear=19500;kmPerYear=20000;kmPerYear=20500;kmPerYear=21000;kmPerYear=21500;kmPerYear=22000;kmPerYear=22500;kmPerYear=23000;kmPerYear=23500;kmPerYear=24000;kmPerYear=24500;kmPerYear=25000;kmPerYear=25500;kmPerYear=26000;kmPerYear=26500;kmPerYear=27000;kmPerYear=27500;kmPerYear=28000;kmPerYear=28500;kmPerYear=29000;kmPerYear=29500;kmPerYear=30000;kmPerYear=30500;kmPerYear=31000;kmPerYear=31500;kmPerYear=32000;kmPerYear=32500;kmPerYear=33000;kmPerYear=33500;kmPerYear=34000;kmPerYear=34500;kmPerYear=35000;kmPerYear=35500;kmPerYear=36000;kmPerYear=36500;kmPerYear=37000;kmPerYear=37500;kmPerYear=38000;kmPerYear=38500;kmPerYear=39000;kmPerYear=39500;kmPerYear=40000;kmPerYear=40500;kmPerYear=41000;kmPerYear=41500;kmPerYear=42000;kmPerYear=42500;kmPerYear=43000;kmPerYear=43500;kmPerYear=44000;kmPerYear=44500;kmPerYear=45000;kmPerYear=45500;kmPerYear=46000;kmPerYear=46500;kmPerYear=47000;kmPerYear=47500;kmPerYear=48000;kmPerYear=48500;kmPerYear=49000;kmPerYear=49500;kmPerYear=50000;Alabama;Alaska;Arizona;Arkansas;California;Colorado;Connecticut;Delaware;District of Columbia;Florida;Georgia;Hawaii;Idaho;Illinois;Indiana;Iowa;Kansas;Kentucky;Louisiana;Maine;Maryland;Massachusetts;Michigan;Minnesota;Mississippi;Missouri;Montana;Nebraska;Nevada;New Hampshire;New Jersey;New Mexico;New York;North Carolina;North Dakota;Ohio;Oklahoma;Oregon;Pennsylvania;Rhode Island;South Carolina;South Dakota;Tennessee;Texas;Utah;Vermont;Virginia;Washington;West Virginia;Wisconsin;Wyoming",
+				"type": "String"
+			}
+		]
+	}
+}
