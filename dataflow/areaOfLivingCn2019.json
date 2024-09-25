@@ -12,8 +12,80 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SplitModelAndGender"
+				},
+				{
+					"name": "DeriveGenderColumns"
+				},
+				{
+					"name": "DeriveModelColumns"
+				},
+				{
+					"name": "SelectGenderColumns"
+				},
+				{
+					"name": "SelectModelColumns"
+				},
+				{
+					"name": "DeriveGenderKeys"
+				},
+				{
+					"name": "DeriveModelKeys"
+				},
+				{
+					"name": "SelectVillageGender"
+				},
+				{
+					"name": "SelectSuburbsGender"
+				},
+				{
+					"name": "SelectTownGender"
+				},
+				{
+					"name": "SelectCityGender"
+				},
+				{
+					"name": "SelectVillageModel"
+				},
+				{
+					"name": "SelectSuburbsModel"
+				},
+				{
+					"name": "SelectTownModel"
+				},
+				{
+					"name": "SelectCityModel"
+				},
+				{
+					"name": "UnionGenderData"
+				},
+				{
+					"name": "UnionModelData"
+				},
+				{
+					"name": "UnionAllData"
+				},
+				{
+					"name": "CreateDataArray"
+				},
+				{
+					"name": "AggregateToArray"
+				},
+				{
+					"name": "SelectDataArray"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          GroupName as string,",
@@ -27,7 +99,172 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1"
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(GroupType == 'Model/Gender',",
+				"     GroupType == 'Model',",
+				"     disjoint: false) ~> SplitModelAndGender@(ModelGender, ModelOnly)",
+				"SplitModelAndGender@ModelGender derive(market = 'CN',",
+				"          year = '2019',",
+				"          variant = iif(GroupName == 'Porsche', '', 'All'),",
+				"          model = iif(GroupName == 'Porsche/Female' || GroupName == 'Porsche/Male', 'All Models',",
+				"                iif(startsWith(split(GroupName, '/')[1], '7') || startsWith(split(GroupName, '/')[1], '9'),",
+				"                    concat('_', split(GroupName, '/')[1]),",
+				"                    split(GroupName, '/')[1])),",
+				"          gender = iif(endsWith(GroupName, '/Female'), 'female', 'male')) ~> DeriveGenderColumns",
+				"SplitModelAndGender@ModelOnly derive(market = 'CN',",
+				"          year = '2019',",
+				"          variant = iif(GroupName == 'Porsche', '', ",
+				"                  iif(GroupType == 'Model/Engine', trim(split(GroupName, '/')[2]), ",
+				"                      GroupName)),",
+				"          model = iif(GroupName == 'Porsche', 'All Models',",
+				"                iif(startsWith(split(GroupName, '/')[1], '7') || startsWith(split(GroupName, '/')[1], '9'),",
+				"                    concat('_', split(GroupName, '/')[1]),",
+				"                    split(GroupName, '/')[1]))) ~> DeriveModelColumns",
+				"DeriveGenderColumns select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          gender,",
+				"          Village = T4,",
+				"          Suburbs = T3,",
+				"          Town = T2,",
+				"          City = T1",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectGenderColumns",
+				"DeriveModelColumns select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          Village = T4,",
+				"          Suburbs = T3,",
+				"          Town = T2,",
+				"          City = T1",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectModelColumns",
+				"SelectGenderColumns derive(Village_key = 'Village',",
+				"          Village_value = Village,",
+				"          Suburbs_key = 'Suburbs',",
+				"          Suburbs_value = Suburbs,",
+				"          Town_key = 'Town',",
+				"          Town_value = Town,",
+				"          City_key = 'City',",
+				"          City_value = City) ~> DeriveGenderKeys",
+				"SelectModelColumns derive(Village_key = 'Village',",
+				"          Village_value = Village,",
+				"          Suburbs_key = 'Suburbs',",
+				"          Suburbs_value = Suburbs,",
+				"          Town_key = 'Town',",
+				"          Town_value = Town,",
+				"          City_key = 'City',",
+				"          City_value = City) ~> DeriveModelKeys",
+				"DeriveGenderKeys select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          gender,",
+				"          key = Village_key,",
+				"          value = Village_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectVillageGender",
+				"DeriveGenderKeys select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          gender,",
+				"          key = Suburbs_key,",
+				"          value = Suburbs_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectSuburbsGender",
+				"DeriveGenderKeys select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          gender,",
+				"          key = Town_key,",
+				"          value = Town_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectTownGender",
+				"DeriveGenderKeys select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          gender,",
+				"          key = City_key,",
+				"          value = City_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectCityGender",
+				"DeriveModelKeys select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          key = Village_key,",
+				"          value = Village_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectVillageModel",
+				"DeriveModelKeys select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          key = Suburbs_key,",
+				"          value = Suburbs_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectSuburbsModel",
+				"DeriveModelKeys select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          key = Town_key,",
+				"          value = Town_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectTownModel",
+				"DeriveModelKeys select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          key = City_key,",
+				"          value = City_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectCityModel",
+				"SelectVillageGender, SelectSuburbsGender, SelectTownGender, SelectCityGender union(byName: true)~> UnionGenderData",
+				"SelectVillageModel, SelectSuburbsModel, SelectTownModel, SelectCityModel union(byName: true)~> UnionModelData",
+				"UnionGenderData, UnionModelData union(byName: true)~> UnionAllData",
+				"UnionAllData derive(data = @(market, year, key, value, variant, model, gender)) ~> CreateDataArray",
+				"CreateDataArray aggregate(groupBy(dummy = 1),",
+				"     data = collect(data)) ~> AggregateToArray",
+				"AggregateToArray select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectDataArray",
+				"SelectDataArray sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
