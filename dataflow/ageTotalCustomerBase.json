@@ -12,7 +12,15 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SplitModelTypes"
@@ -21,19 +29,10 @@
 					"name": "DeriveGenderColumns"
 				},
 				{
+					"name": "AggregateGenderData"
+				},
+				{
 					"name": "DeriveEngineColumns"
-				},
-				{
-					"name": "SelectGenderColumns"
-				},
-				{
-					"name": "SelectEngineColumns"
-				},
-				{
-					"name": "DeriveGenderKeys"
-				},
-				{
-					"name": "DeriveEngineKeys"
 				},
 				{
 					"name": "UnionAllData"
@@ -62,46 +61,42 @@
 				"     disjoint: false) ~> SplitModelTypes@(ModelGender, ModelEngine)",
 				"SplitModelTypes@ModelGender derive(market = 'CN',",
 				"          year = '2019',",
-				"          variant = 'All',",
 				"          model = iif(GroupName == 'Porsche/Female' || GroupName == 'Porsche/Male', 'All Models',",
-				"           iif(startsWith(split(GroupName, '/')[1], '7') || startsWith(split(GroupName, '/')[1], '9'),",
-				"             concat('', split(GroupName, '/')[1]),",
-				"             split(GroupName, '/')[1])),",
-				"          gender = iif(endsWith(GroupName, '/Female'), 'female', 'male'),",
-				"          value = AverageExistingCustomerAge) ~> DeriveGenderColumns",
+				"        iif(startsWith(split(GroupName, '/')[1], '7') || startsWith(split(GroupName, '/')[1], '9'),",
+				"            concat('', split(GroupName, '/')[1]),",
+				"            split(GroupName, '/')[1])),",
+				"          male = iif(endsWith(GroupName, '/Male'), AverageExistingCustomerAge, toDouble(0)),",
+				"          female = iif(endsWith(GroupName, '/Female'), AverageExistingCustomerAge, toDouble(0))) ~> DeriveGenderColumns",
+				"DeriveGenderColumns aggregate(groupBy(market,",
+				"          year,",
+				"          model),",
+				"     male = max(male),",
+				"          female = max(female),",
+				"          total = (max(male) + max(female)) / 2) ~> AggregateGenderData",
 				"SplitModelTypes@ModelEngine derive(market = 'CN',",
 				"          year = '2019',",
 				"          model = replace(GroupName, '/', ' '),",
-				"          value = AverageExistingCustomerAge) ~> DeriveEngineColumns",
-				"DeriveGenderColumns select(mapColumn(",
-				"          market,",
-				"          year,",
-				"          variant,",
-				"          model,",
-				"          gender,",
-				"          value",
-				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectGenderColumns",
-				"DeriveEngineColumns select(mapColumn(",
-				"          market,",
-				"          year,",
-				"          model,",
-				"          total = value",
-				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectEngineColumns",
-				"SelectGenderColumns derive(key = 'AverageExistingCustomerAge') ~> DeriveGenderKeys",
-				"SelectEngineColumns derive(key = 'AverageExistingCustomerAge') ~> DeriveEngineKeys",
-				"DeriveGenderKeys, DeriveEngineKeys union(byName: true)~> UnionAllData",
-				"UnionAllData derive(data = @(market, year, key, value, variant, model, gender)) ~> CreateDataArray",
+				"          total = AverageExistingCustomerAge) ~> DeriveEngineColumns",
+				"AggregateGenderData, DeriveEngineColumns union(byName: true)~> UnionAllData",
+				"UnionAllData derive(data = @(market, year, model, male, female, total)) ~> CreateDataArray",
 				"CreateDataArray aggregate(groupBy(dummy = 1),",
 				"     data = collect(data)) ~> AggregateToArray",
 				"AggregateToArray select(mapColumn(",
 				"          data",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectDataArray"
+				"     skipDuplicateMapOutputs: false) ~> SelectDataArray",
+				"SelectDataArray sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:['ageTotalCustomerBaseChart.json'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
