@@ -41,21 +41,6 @@
 					"name": "AggregateData"
 				},
 				{
-					"name": "AggregateBaseModelData"
-				},
-				{
-					"name": "AggregateAllModelsData"
-				},
-				{
-					"name": "PrepareBaseModelData"
-				},
-				{
-					"name": "PrepareAllModelsData"
-				},
-				{
-					"name": "UnionModelData"
-				},
-				{
 					"name": "SelectFinalColumns"
 				},
 				{
@@ -420,22 +405,7 @@
 				"          BaseModel),",
 				"     male = sum(iif({170111} == 1, 1, 0)),",
 				"          female = sum(iif({170111} == 2, 1, 0))) ~> AggregateData",
-				"AggregateData aggregate(groupBy(MappedMarket,",
-				"          Year,",
-				"          Hobby,",
-				"          BaseModel),",
-				"     male = sum(male),",
-				"          female = sum(female)) ~> AggregateBaseModelData",
-				"AggregateData aggregate(groupBy(MappedMarket,",
-				"          Year,",
-				"          Hobby),",
-				"     male = sum(male),",
-				"          female = sum(female)) ~> AggregateAllModelsData",
-				"AggregateBaseModelData derive(Variant = 'All') ~> PrepareBaseModelData",
-				"AggregateAllModelsData derive(BaseModel = 'All Models',",
-				"          Variant = '') ~> PrepareAllModelsData",
-				"AggregateData, PrepareBaseModelData, PrepareAllModelsData union(byName: true)~> UnionModelData",
-				"UnionModelData select(mapColumn(",
+				"AggregateData select(mapColumn(",
 				"          market = MappedMarket,",
 				"          year = Year,",
 				"          key = Hobby,",

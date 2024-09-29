@@ -44,15 +44,6 @@
 					"name": "SelectFinalColumns"
 				},
 				{
-					"name": "AggregateAllModels"
-				},
-				{
-					"name": "FormatAllModels"
-				},
-				{
-					"name": "UnionWithAllModels"
-				},
-				{
 					"name": "CollectIntoArray"
 				}
 			],
@@ -290,17 +281,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> SelectFinalColumns",
-				"SelectFinalColumns aggregate(groupBy(market,",
-				"          year),",
-				"     all_female = sum(female),",
-				"          all_male = sum(male)) ~> AggregateAllModels",
-				"AggregateAllModels derive(key = 'All Models',",
-				"          female = all_female,",
-				"          male = all_male,",
-				"          variant = 'All',",
-				"          model = 'All Models') ~> FormatAllModels",
-				"SelectFinalColumns, FormatAllModels union(byName: true)~> UnionWithAllModels",
-				"UnionWithAllModels aggregate(groupBy(dummy = 1),",
+				"SelectFinalColumns aggregate(groupBy(dummy = 1),",
 				"     data = collect(@(",
 				"          market,",
 				"          year,",
