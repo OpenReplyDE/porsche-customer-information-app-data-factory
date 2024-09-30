@@ -1,0 +1,111 @@
+{
+	"name": "totalCustomerBaseGenderDataCN",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CAP_CN_2019",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SplitModelTypes"
+				},
+				{
+					"name": "DeriveModelColumns"
+				},
+				{
+					"name": "DeriveEngineBodyColumns"
+				},
+				{
+					"name": "UnionAllData"
+				},
+				{
+					"name": "SelectFinalColumns"
+				},
+				{
+					"name": "CreateDataArray"
+				},
+				{
+					"name": "AggregateToArray"
+				},
+				{
+					"name": "SelectDataArray"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          ShareOfMen as double,",
+				"          ShareOfWomen as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(GroupType == 'Model',",
+				"     GroupType == 'Model/Engine' || GroupType == 'Model/Body',",
+				"     disjoint: false) ~> SplitModelTypes@(Model, ModelEngineBody)",
+				"SplitModelTypes@Model derive(market = 'CN',",
+				"          year = '2019',",
+				"          model = iif(GroupName == 'Porsche', 'All Models', concat(GroupName, ' All')),",
+				"          male = ShareOfMen,",
+				"          female = ShareOfWomen) ~> DeriveModelColumns",
+				"SplitModelTypes@ModelEngineBody derive(market = 'CN',",
+				"          year = '2019',",
+				"          model = iif(GroupName == 'Porsche', 'All Models',",
+				"        iif(GroupType == 'Model/Engine', ",
+				"            replace(GroupName, '/', ' '),",
+				"            concat(split(GroupName, '/')[1], ' All ', split(GroupName, '/')[2])",
+				"        )",
+				"    ),",
+				"          male = ShareOfMen,",
+				"          female = ShareOfWomen) ~> DeriveEngineBodyColumns",
+				"DeriveModelColumns, DeriveEngineBodyColumns union(byName: true)~> UnionAllData",
+				"UnionAllData select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          model,",
+				"          male,",
+				"          female",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectFinalColumns",
+				"SelectFinalColumns derive(data = @(market, year, model, male, female)) ~> CreateDataArray",
+				"CreateDataArray aggregate(groupBy(dummy = 1),",
+				"     data = collect(data)) ~> AggregateToArray",
+				"AggregateToArray select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectDataArray",
+				"SelectDataArray sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:['totalCustomerBaseGenderChart.json'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
