@@ -1,0 +1,134 @@
+{
+	"name": "porscheInPosessionCN",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CAP_CN_2019",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "SplitModelTypes"
+				},
+				{
+					"name": "DeriveGenderColumns"
+				},
+				{
+					"name": "AggregateGenderData"
+				},
+				{
+					"name": "DeriveEngineColumns"
+				},
+				{
+					"name": "UnionAllData"
+				},
+				{
+					"name": "CreateDataArray"
+				},
+				{
+					"name": "AggregateToArray"
+				},
+				{
+					"name": "SelectDataArray"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          {PorscheInPossession=1} as double,",
+				"          {PorscheInPossession=2} as double,",
+				"          {PorscheInPossession=3} as double,",
+				"          {PorscheInPossession>=4} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(GroupType == 'Model/Gender',",
+				"     GroupType == 'Model/Engine',",
+				"     disjoint: false) ~> SplitModelTypes@(ModelGender, ModelEngine)",
+				"SplitModelTypes@ModelGender derive(market = 'CN',",
+				"          year = '2019',",
+				"          model = iif(GroupName == 'Porsche/Female' || GroupName == 'Porsche/Male', 'All Models',",
+				"        iif(locate('/', GroupName) > 0, ",
+				"            concat(trim(split(GroupName, '/')[1]), ' All'),",
+				"            GroupName",
+				"        )",
+				"    ),",
+				"          male_one = iif(endsWith(GroupName, '/Male'), toDouble({PorscheInPossession=1}), toDouble(0)),",
+				"          male_two = iif(endsWith(GroupName, '/Male'), toDouble({PorscheInPossession=2}), toDouble(0)),",
+				"          male_three = iif(endsWith(GroupName, '/Male'), toDouble({PorscheInPossession=3}), toDouble(0)),",
+				"          male_four = iif(endsWith(GroupName, '/Male'), toDouble({PorscheInPossession>=4}), toDouble(0)),",
+				"          female_one = iif(endsWith(GroupName, '/Female'), toDouble({PorscheInPossession=1}), toDouble(0)),",
+				"          female_two = iif(endsWith(GroupName, '/Female'), toDouble({PorscheInPossession=2}), toDouble(0)),",
+				"          female_three = iif(endsWith(GroupName, '/Female'), toDouble({PorscheInPossession=3}), toDouble(0)),",
+				"          female_four = iif(endsWith(GroupName, '/Female'), toDouble({PorscheInPossession>=4}), toDouble(0))) ~> DeriveGenderColumns",
+				"DeriveGenderColumns aggregate(groupBy(market,",
+				"          year,",
+				"          model),",
+				"     male_one = max(male_one),",
+				"          male_two = max(male_two),",
+				"          male_three = max(male_three),",
+				"          male_four = max(male_four),",
+				"          female_one = max(female_one),",
+				"          female_two = max(female_two),",
+				"          female_three = max(female_three),",
+				"          female_four = max(female_four),",
+				"          total_one = (max(male_one) + max(female_one)) / 2,",
+				"          total_two = (max(male_two) + max(female_two)) / 2,",
+				"          total_three = (max(male_three) + max(female_three)) / 2,",
+				"          total_four = (max(male_four) + max(female_four)) / 2) ~> AggregateGenderData",
+				"SplitModelTypes@ModelEngine derive(market = 'CN',",
+				"          year = '2019',",
+				"          model = replace(GroupName, '/', ' '),",
+				"          total_one = {PorscheInPossession=1},",
+				"          total_two = {PorscheInPossession=2},",
+				"          total_three = {PorscheInPossession=3},",
+				"          total_four = {PorscheInPossession>=4}) ~> DeriveEngineColumns",
+				"AggregateGenderData, DeriveEngineColumns union(byName: true)~> UnionAllData",
+				"UnionAllData derive(data = iif(isNull(male_one),",
+				"        @(",
+				"            market,",
+				"            year,",
+				"            model,",
+				"            total_one,",
+				"            total_two,",
+				"            total_three,",
+				"            total_four",
+				"        ),",
+				"        @(",
+				"            market,",
+				"            year,",
+				"            model,",
+				"            male_one,",
+				"            male_two,",
+				"            male_three,",
+				"            male_four,",
+				"            female_one,",
+				"            female_two,",
+				"            female_three,",
+				"            female_four,",
+				"            total_one,",
+				"            total_two,",
+				"            total_three,",
+				"            total_four",
+				"        )",
+				"    )) ~> CreateDataArray",
+				"CreateDataArray aggregate(groupBy(dummy = 1),",
+				"     data = collect(data)) ~> AggregateToArray",
+				"AggregateToArray select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectDataArray"
+			]
+		}
+	}
+}

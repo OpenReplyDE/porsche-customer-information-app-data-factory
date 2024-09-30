@@ -1,0 +1,122 @@
+{
+	"name": "churnConquestDataCN",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CAP_CN_2019",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SplitModelTypes"
+				},
+				{
+					"name": "DeriveGenderColumns"
+				},
+				{
+					"name": "AggregateGenderData"
+				},
+				{
+					"name": "DeriveEngineColumns"
+				},
+				{
+					"name": "UnionAllData"
+				},
+				{
+					"name": "CreateDataArray"
+				},
+				{
+					"name": "AggregateToArray"
+				},
+				{
+					"name": "SelectDataArray"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          ChurnRate as double,",
+				"          ConquestRate as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(GroupType == 'Model/Gender',",
+				"     GroupType == 'Model/Engine',",
+				"     disjoint: false) ~> SplitModelTypes@(ModelGender, ModelEngine)",
+				"SplitModelTypes@ModelGender derive(market = 'CN',",
+				"          year = '2019',",
+				"          model = iif(GroupName == 'Porsche/Female' || GroupName == 'Porsche/Male', 'All Models',",
+				"        iif(locate('/', GroupName) > 0, ",
+				"            concat(trim(split(GroupName, '/')[1]), ' All'),",
+				"            GroupName",
+				"        )",
+				"    ),",
+				"          male_churnRate = iif(endsWith(GroupName, '/Male'), toDouble(ChurnRate), toDouble(0)),",
+				"          male_conquestRate = iif(endsWith(GroupName, '/Male'), toDouble(ConquestRate), toDouble(0)),",
+				"          female_churnRate = iif(endsWith(GroupName, '/Female'), toDouble(ChurnRate), toDouble(0)),",
+				"          female_conquestRate = iif(endsWith(GroupName, '/Female'), toDouble(ConquestRate), toDouble(0))) ~> DeriveGenderColumns",
+				"DeriveGenderColumns aggregate(groupBy(market,",
+				"          year,",
+				"          model),",
+				"     male_churnRate = max(male_churnRate),",
+				"          male_conquestRate = max(male_conquestRate),",
+				"          female_churnRate = max(female_churnRate),",
+				"          female_conquestRate = max(female_conquestRate),",
+				"          total_churnRate = (max(male_churnRate) + max(female_churnRate)) / 2,",
+				"          total_conquestRate = (max(male_conquestRate) + max(female_conquestRate)) / 2) ~> AggregateGenderData",
+				"SplitModelTypes@ModelEngine derive(market = 'CN',",
+				"          year = '2019',",
+				"          model = replace(GroupName, '/', ' '),",
+				"          total_churnRate = toDouble(ChurnRate),",
+				"          total_conquestRate = toDouble(ConquestRate)) ~> DeriveEngineColumns",
+				"AggregateGenderData, DeriveEngineColumns union(byName: true)~> UnionAllData",
+				"UnionAllData derive(data = @(",
+				"        market,",
+				"        year,",
+				"        model,",
+				"        male_churnRate,",
+				"        male_conquestRate,",
+				"        female_churnRate,",
+				"        female_conquestRate,",
+				"        total_churnRate,",
+				"        total_conquestRate",
+				"    )) ~> CreateDataArray",
+				"CreateDataArray aggregate(groupBy(dummy = 1),",
+				"     data = collect(data)) ~> AggregateToArray",
+				"AggregateToArray select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectDataArray",
+				"SelectDataArray sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:['churnConquestChartCN.json'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
