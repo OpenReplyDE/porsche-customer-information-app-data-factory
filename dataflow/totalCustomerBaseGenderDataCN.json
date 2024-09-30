@@ -92,7 +92,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     partitionFileNames:['totalCustomerBaseGenderChart.json'],",
+				"     partitionFileNames:['genderTotalCustomerBaseChart.json'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
