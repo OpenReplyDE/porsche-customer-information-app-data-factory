@@ -29,7 +29,7 @@
 					"name": "DeriveModelColumns"
 				},
 				{
-					"name": "DeriveEngineBodyColumns"
+					"name": "DeriveEngineColumns"
 				},
 				{
 					"name": "UnionAllData"
@@ -58,24 +58,19 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
 				"source1 split(GroupType == 'Model',",
-				"     GroupType == 'Model/Engine' || GroupType == 'Model/Body',",
-				"     disjoint: false) ~> SplitModelTypes@(Model, ModelEngineBody)",
+				"     GroupType == 'Model/Engine',",
+				"     disjoint: false) ~> SplitModelTypes@(Model, ModelEngine)",
 				"SplitModelTypes@Model derive(market = 'CN',",
 				"          year = '2019',",
 				"          model = iif(GroupName == 'Porsche', 'All Models', concat(GroupName, ' All')),",
 				"          male = ShareOfMen,",
 				"          female = ShareOfWomen) ~> DeriveModelColumns",
-				"SplitModelTypes@ModelEngineBody derive(market = 'CN',",
+				"SplitModelTypes@ModelEngine derive(market = 'CN',",
 				"          year = '2019',",
-				"          model = iif(GroupName == 'Porsche', 'All Models',",
-				"        iif(GroupType == 'Model/Engine', ",
-				"            replace(GroupName, '/', ' '),",
-				"            concat(split(GroupName, '/')[1], ' All ', split(GroupName, '/')[2])",
-				"        )",
-				"    ),",
+				"          model = replace(GroupName, '/', ' '),",
 				"          male = ShareOfMen,",
-				"          female = ShareOfWomen) ~> DeriveEngineBodyColumns",
-				"DeriveModelColumns, DeriveEngineBodyColumns union(byName: true)~> UnionAllData",
+				"          female = ShareOfWomen) ~> DeriveEngineColumns",
+				"DeriveModelColumns, DeriveEngineColumns union(byName: true)~> UnionAllData",
 				"UnionAllData select(mapColumn(",
 				"          market,",
 				"          year,",
