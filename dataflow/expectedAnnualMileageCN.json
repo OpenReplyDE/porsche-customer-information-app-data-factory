@@ -1,0 +1,38 @@
+{
+	"name": "expectedAnnualMileageCN",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CAP_CN_2019",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          {kmPerYear=5000} as double,",
+				"          {kmPerYear=10000} as double,",
+				"          {kmPerYear=15000} as double,",
+				"          {kmPerYear=20000} as double,",
+				"          {kmPerYear=25000} as double,",
+				"          {kmPerYear=30000} as double,",
+				"          {kmPerYear=35000} as double,",
+				"          {kmPerYear=40000} as double,",
+				"          {kmPerYear=45000} as double,",
+				"          {kmPerYear=50000} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1"
+			]
+		}
+	}
+}
