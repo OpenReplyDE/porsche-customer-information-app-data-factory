@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "areaOfLivingCn2019",
+						"referenceName": "areaOfLivingCN",
 						"type": "DataFlowReference"
 					},
 					"compute": {

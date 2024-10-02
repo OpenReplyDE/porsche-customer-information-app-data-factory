@@ -1,5 +1,5 @@
 {
-	"name": "averageHoldingPeriodData",
+	"name": "averageHoldingPeriodCN",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {

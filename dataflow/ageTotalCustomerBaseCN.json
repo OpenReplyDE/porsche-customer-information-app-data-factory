@@ -1,5 +1,5 @@
 {
-	"name": "ageTotalCustomerBase",
+	"name": "ageTotalCustomerBaseCN",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {

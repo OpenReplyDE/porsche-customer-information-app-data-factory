@@ -1,5 +1,5 @@
 {
-	"name": "newCustomerRateData",
+	"name": "newCustomerRateCN",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
