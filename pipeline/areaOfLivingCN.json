@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "areaOfLivingCn2019",
+				"name": "areaOfLivingCN",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
