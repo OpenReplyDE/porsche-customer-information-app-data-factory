@@ -1,0 +1,28 @@
+{
+	"name": "CAP_UK_2020",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "C@P_UK_2020.csv",
+				"container": "test-data"
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "GroupName;GroupType;AverageExistingCustomerAge;ExistingCustomerAge=0-30;ExistingCustomerAge=30-50;ExistingCustomerAge=50-100;ShareOfMen;ShareOfWomen;AverageHoldingPeriod;AverageNumberOfPorscheInPossession;PorscheInPossession=1;PorscheInPossession=2;PorscheInPossession=3;PorscheInPossession>=4;FirstTimeBuyerRate;ChurnRate;ConquestRate;L�ndlicher Raum;Kleinst�dtischer Raum;St�dtischer Raum;Ballungsraum;East Midlands;East of England;Greater London;North East England;North West England;Northern Ireland;Scotland;South East England;South West England;Wales;West Midlands;Yorkshire and The Humber",
+				"type": "String"
+			}
+		]
+	}
+}
