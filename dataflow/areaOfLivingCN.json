@@ -42,10 +42,6 @@
 			],
 			"sinks": [
 				{
-					"linkedService": {
-						"referenceName": "AzureDataLakeStorage1",
-						"type": "LinkedServiceReference"
-					},
 					"name": "sink1"
 				}
 			],
@@ -264,22 +260,22 @@
 					"name": "SelectCityEngine"
 				},
 				{
+					"name": "SelectCityEngine2"
+				},
+				{
+					"name": "SelectCityEngine3"
+				},
+				{
+					"name": "SelectCityEngine4"
+				},
+				{
+					"name": "SelectCityEngine5"
+				},
+				{
 					"name": "UnionGenderData"
 				},
 				{
 					"name": "UnionEngineData"
-				},
-				{
-					"name": "UnionAllData"
-				},
-				{
-					"name": "CreateDataArray"
-				},
-				{
-					"name": "AggregateToArray"
-				},
-				{
-					"name": "SelectDataArray"
 				}
 			],
 			"scriptLines": [
@@ -1008,28 +1004,54 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> SelectCityEngine",
-				"SelectVillageGender, SelectVillageGender2, SelectVillageGender3, SelectVillageGender4, SelectVillageGender5, SelectSuburbsGender, SelectSuburbsGender2, SelectSuburbsGender3, SelectSuburbsGender4, SelectSuburbsGender5, SelectTownGender, SelectTownGender2, SelectTownGender3, SelectTownGender4, SelectTownGender5, SelectCityGender, SelectCityGender2, SelectCityGender3, SelectCityGender4, SelectCityGender5 union(byName: true)~> UnionGenderData",
-				"SelectVillageEngine, SelectSuburbsEngine, SelectTownEngine, SelectCityEngine union(byName: true)~> UnionEngineData",
-				"UnionGenderData, UnionEngineData union(byName: true)~> UnionAllData",
-				"UnionAllData derive(data = @(market, year, key, value, variant, model, gender)) ~> CreateDataArray",
-				"CreateDataArray aggregate(groupBy(dummy = 1),",
-				"     data = collect(data)) ~> AggregateToArray",
-				"AggregateToArray select(mapColumn(",
-				"          data",
+				"DeriveEngineKeys2 select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          key = City_key,",
+				"          value = City_value",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectDataArray",
-				"SelectDataArray sink(allowSchemaDrift: true,",
+				"     skipDuplicateMapOutputs: false) ~> SelectCityEngine2",
+				"DeriveEngineKeys3 select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          key = City_key,",
+				"          value = City_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectCityEngine3",
+				"DeriveEngineKeys4 select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          key = City_key,",
+				"          value = City_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectCityEngine4",
+				"DeriveEngineKeys5 select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          key = City_key,",
+				"          value = City_value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectCityEngine5",
+				"SelectVillageGender, SelectVillageGender2, SelectVillageGender3, SelectVillageGender4, SelectVillageGender5, SelectSuburbsGender, SelectSuburbsGender2, SelectSuburbsGender3, SelectSuburbsGender4, SelectSuburbsGender5, SelectTownGender, SelectTownGender2, SelectTownGender3, SelectTownGender4, SelectTownGender5, SelectCityGender, SelectCityGender2, SelectCityGender3, SelectCityGender4, SelectCityGender5 union(byName: true)~> UnionGenderData",
+				"SelectVillageEngine, SelectSuburbsEngine, SelectTownEngine, SelectCityEngine union(byName: true)~> UnionEngineData",
+				" sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'json',",
-				"     fileSystem: 'output',",
-				"     partitionFileNames:['cityTypeChartCN.json'],",
-				"     umask: 0022,",
-				"     preCommands: [],",
-				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sink1"
+				"     preCommands: [],",
+				"     postCommands: []) ~> sink1"
 			]
 		}
 	}
