@@ -413,7 +413,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     partitionFileNames:['porscheInPossessionUK.json'],",
+				"     partitionFileNames:['porschesInPossessionUK.json'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
