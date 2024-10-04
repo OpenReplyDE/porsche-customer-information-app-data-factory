@@ -40,7 +40,15 @@
 					"name": "source5"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SplitModelTypes1"
@@ -155,6 +163,12 @@
 				},
 				{
 					"name": "UnionAllData"
+				},
+				{
+					"name": "SelectRelevantColumns"
+				},
+				{
+					"name": "UnpivotCityTypes"
 				},
 				{
 					"name": "CreateDataArray"
@@ -515,14 +529,49 @@
 				"DeriveGenderKeys1, DeriveGenderKeys2, DeriveGenderKeys3, DeriveGenderKeys4, DeriveGenderKeys5 union(byName: true)~> UnionGenderData",
 				"DeriveEngineKeys1, DeriveEngineKeys2, DeriveEngineKeys3, DeriveEngineKeys4, DeriveEngineKeys5 union(byName: true)~> UnionEngineData",
 				"UnionGenderData, UnionEngineData union(byName: true)~> UnionAllData",
-				"UnionAllData derive(data = @(market, year, key, value, variant, model, gender)) ~> CreateDataArray",
+				"UnionAllData select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          gender,",
+				"          Village,",
+				"          Suburbs,",
+				"          Town,",
+				"          City",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectRelevantColumns",
+				"SelectRelevantColumns unpivot(output(",
+				"          key as string,",
+				"          value as double",
+				"     ),",
+				"     ungroupBy(market,",
+				"          year,",
+				"          variant,",
+				"          model,",
+				"          gender),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> UnpivotCityTypes",
+				"UnpivotCityTypes derive(data = @(market, year, key, value, variant, model, gender)) ~> CreateDataArray",
 				"CreateDataArray aggregate(groupBy(dummy = 1),",
 				"     data = collect(data)) ~> AggregateToArray",
 				"AggregateToArray select(mapColumn(",
 				"          data",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectDataArray"
+				"     skipDuplicateMapOutputs: false) ~> SelectDataArray",
+				"SelectDataArray sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:['cityTypeChartUK.json'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
