@@ -1,9 +1,9 @@
 {
-	"name": "administrativeUnitDE",
+	"name": "administrativeUnitUS",
 	"properties": {
 		"activities": [
 			{
-				"name": "administrativeUnitDE",
+				"name": "administrativeUnitUS",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "administrativeUnitDE",
+						"referenceName": "administrativeUnitUS",
 						"type": "DataFlowReference"
 					},
 					"compute": {
