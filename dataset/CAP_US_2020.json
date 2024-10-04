@@ -1,0 +1,28 @@
+{
+	"name": "CAP_US_2020",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "C@P_USA_2020.csv",
+				"container": "test-data"
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "GroupName;GroupType;AverageExistingCustomerAge;ExistingCustomerAge=0-30;ExistingCustomerAge=30-50;ExistingCustomerAge=50-100;ShareOfMen;ShareOfWomen;AverageHoldingPeriod;AverageNumberOfPorscheInPossession;PorscheInPossession=1;PorscheInPossession=2;PorscheInPossession=3;PorscheInPossession>=4;FirstTimeBuyerRate;ChurnRate;ConquestRate;Alabama;Alaska;Arizona;Arkansas;California;Colorado;Connecticut;Delaware;District of Columbia;Florida;Georgia;Hawaii;Idaho;Illinois;Indiana;Iowa;Kansas;Kentucky;Louisiana;Maine;Maryland;Massachusetts;Michigan;Minnesota;Mississippi;Missouri;Montana;Nebraska;Nevada;New Hampshire;New Jersey;New Mexico;New York;North Carolina;North Dakota;Ohio;Oklahoma;Oregon;Pennsylvania;Rhode Island;South Carolina;South Dakota;Tennessee;Texas;Utah;Vermont;Virginia;Washington;West Virginia;Wisconsin;Wyoming",
+				"type": "String"
+			}
+		]
+	}
+}
