@@ -10,6 +10,34 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_DE_2020",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_DE_2021",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_DE_2022",
+						"type": "DatasetReference"
+					},
+					"name": "source4"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_DE_2023",
+						"type": "DatasetReference"
+					},
+					"name": "source5"
 				}
 			],
 			"sinks": [
@@ -98,6 +126,50 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          Landgemeinde as double,",
+				"          Kleinstadt as double,",
+				"          Mittelstadt as double,",
+				"          {Gro�stadt} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          Landgemeinde as double,",
+				"          Kleinstadt as double,",
+				"          Mittelstadt as double,",
+				"          {Gro�stadt} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source3",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          Landgemeinde as double,",
+				"          Kleinstadt as double,",
+				"          Mittelstadt as double,",
+				"          {Gro�stadt} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source4",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          Landgemeinde as double,",
+				"          Kleinstadt as double,",
+				"          Mittelstadt as double,",
+				"          {Gro�stadt} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source5",
 				"source1 split(GroupType == 'Model/Gender',",
 				"     GroupType == 'Model/Engine',",
 				"     disjoint: false) ~> SplitModelTypes@(ModelGender, ModelEngine)",
