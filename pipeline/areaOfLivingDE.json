@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "areaOfLivingDe",
+				"name": "areaOfLivingDE",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "areaOfLivingDe",
+						"referenceName": "areaOfLivingDE",
 						"type": "DataFlowReference"
 					},
 					"compute": {
