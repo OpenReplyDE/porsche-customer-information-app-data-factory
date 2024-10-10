@@ -1,5 +1,5 @@
 {
-	"name": "FullData",
+	"name": "PSS",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage2",
