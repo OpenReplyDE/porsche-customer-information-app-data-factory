@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "FullData",
+						"referenceName": "PSS",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -256,7 +256,6 @@
 				"AdjustModelName filter(!isNull(Key) && ",
 				"     !isNull(Year) && ",
 				"     !isNull(MappedMarket) &&",
-				"     !isNull(Q1701) &&",
 				"     instr(Key, 'Porsche') == 0) ~> FilterValidData",
 				"FilterValidData derive(Gender = case(",
 				"          Q1701 == 1, 'male',",
@@ -269,13 +268,15 @@
 				"          Variant,",
 				"          Model),",
 				"     male = countIf(Gender == 'male'),",
-				"          female = countIf(Gender == 'female')) ~> AggregateData",
+				"          female = countIf(Gender == 'female'),",
+				"          all = count(1)) ~> AggregateData",
 				"AggregateData select(mapColumn(",
 				"          market = MappedMarket,",
 				"          year = Year,",
 				"          key = Key,",
 				"          female,",
 				"          male,",
+				"          all,",
 				"          variant = Variant,",
 				"          model = Model",
 				"     ),",
@@ -286,6 +287,7 @@
 				"          market,",
 				"          year,",
 				"          key,",
+				"          all,",
 				"          female,",
 				"          male,",
 				"          variant,",
