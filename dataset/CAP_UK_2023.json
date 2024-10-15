@@ -20,7 +20,543 @@
 		},
 		"schema": [
 			{
-				"name": "GroupName;GroupType;AverageExistingCustomerAge;ExistingCustomerAge=0-30;ExistingCustomerAge=30-50;ExistingCustomerAge=50-100;ShareOfMen;ShareOfWomen;AverageHoldingPeriod;AverageNumberOfPorscheInPossession;PorscheInPossession=1;PorscheInPossession=2;PorscheInPossession=3;PorscheInPossession>=4;FirstTimeBuyerRate;ChurnRate;ConquestRate;MeanKmPerYear;kmPerYear=0;kmPerYear=500;kmPerYear=1000;kmPerYear=1500;kmPerYear=2000;kmPerYear=2500;kmPerYear=3000;kmPerYear=3500;kmPerYear=4000;kmPerYear=4500;kmPerYear=5000;kmPerYear=5500;kmPerYear=6000;kmPerYear=6500;kmPerYear=7000;kmPerYear=7500;kmPerYear=8000;kmPerYear=8500;kmPerYear=9000;kmPerYear=9500;kmPerYear=10000;kmPerYear=10500;kmPerYear=11000;kmPerYear=11500;kmPerYear=12000;kmPerYear=12500;kmPerYear=13000;kmPerYear=13500;kmPerYear=14000;kmPerYear=14500;kmPerYear=15000;kmPerYear=15500;kmPerYear=16000;kmPerYear=16500;kmPerYear=17000;kmPerYear=17500;kmPerYear=18000;kmPerYear=18500;kmPerYear=19000;kmPerYear=19500;kmPerYear=20000;kmPerYear=20500;kmPerYear=21000;kmPerYear=21500;kmPerYear=22000;kmPerYear=22500;kmPerYear=23000;kmPerYear=23500;kmPerYear=24000;kmPerYear=24500;kmPerYear=25000;kmPerYear=25500;kmPerYear=26000;kmPerYear=26500;kmPerYear=27000;kmPerYear=27500;kmPerYear=28000;kmPerYear=28500;kmPerYear=29000;kmPerYear=29500;kmPerYear=30000;kmPerYear=30500;kmPerYear=31000;kmPerYear=31500;kmPerYear=32000;kmPerYear=32500;kmPerYear=33000;kmPerYear=33500;kmPerYear=34000;kmPerYear=34500;kmPerYear=35000;kmPerYear=35500;kmPerYear=36000;kmPerYear=36500;kmPerYear=37000;kmPerYear=37500;kmPerYear=38000;kmPerYear=38500;kmPerYear=39000;kmPerYear=39500;kmPerYear=40000;kmPerYear=40500;kmPerYear=41000;kmPerYear=41500;kmPerYear=42000;kmPerYear=42500;kmPerYear=43000;kmPerYear=43500;kmPerYear=44000;kmPerYear=44500;kmPerYear=45000;kmPerYear=45500;kmPerYear=46000;kmPerYear=46500;kmPerYear=47000;kmPerYear=47500;kmPerYear=48000;kmPerYear=48500;kmPerYear=49000;kmPerYear=49500;kmPerYear=50000;L�ndlicher Raum;Kleinst�dtischer Raum;St�dtischer Raum;Ballungsraum;East Midlands;East of England;Greater London;North East England;North West England;Northern Ireland;Scotland;South East England;South West England;Wales;West Midlands;Yorkshire and The Humber",
+				"name": "GroupName",
+				"type": "String"
+			},
+			{
+				"name": "GroupType",
+				"type": "String"
+			},
+			{
+				"name": "AverageExistingCustomerAge",
+				"type": "String"
+			},
+			{
+				"name": "ExistingCustomerAge=0-30",
+				"type": "String"
+			},
+			{
+				"name": "ExistingCustomerAge=30-50",
+				"type": "String"
+			},
+			{
+				"name": "ExistingCustomerAge=50-100",
+				"type": "String"
+			},
+			{
+				"name": "ShareOfMen",
+				"type": "String"
+			},
+			{
+				"name": "ShareOfWomen",
+				"type": "String"
+			},
+			{
+				"name": "AverageHoldingPeriod",
+				"type": "String"
+			},
+			{
+				"name": "AverageNumberOfPorscheInPossession",
+				"type": "String"
+			},
+			{
+				"name": "PorscheInPossession=1",
+				"type": "String"
+			},
+			{
+				"name": "PorscheInPossession=2",
+				"type": "String"
+			},
+			{
+				"name": "PorscheInPossession=3",
+				"type": "String"
+			},
+			{
+				"name": "PorscheInPossession>=4",
+				"type": "String"
+			},
+			{
+				"name": "FirstTimeBuyerRate",
+				"type": "String"
+			},
+			{
+				"name": "ChurnRate",
+				"type": "String"
+			},
+			{
+				"name": "ConquestRate",
+				"type": "String"
+			},
+			{
+				"name": "MeanKmPerYear",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=0",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=1000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=1500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=2000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=2500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=3000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=3500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=4000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=4500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=5000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=5500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=6000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=6500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=7000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=7500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=8000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=8500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=9000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=9500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=10000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=10500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=11000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=11500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=12000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=12500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=13000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=13500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=14000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=14500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=15000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=15500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=16000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=16500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=17000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=17500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=18000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=18500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=19000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=19500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=20000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=20500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=21000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=21500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=22000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=22500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=23000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=23500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=24000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=24500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=25000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=25500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=26000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=26500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=27000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=27500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=28000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=28500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=29000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=29500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=30000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=30500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=31000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=31500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=32000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=32500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=33000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=33500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=34000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=34500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=35000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=35500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=36000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=36500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=37000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=37500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=38000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=38500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=39000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=39500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=40000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=40500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=41000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=41500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=42000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=42500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=43000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=43500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=44000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=44500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=45000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=45500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=46000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=46500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=47000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=47500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=48000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=48500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=49000",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=49500",
+				"type": "String"
+			},
+			{
+				"name": "kmPerYear=50000",
+				"type": "String"
+			},
+			{
+				"name": "L�ndlicher Raum",
+				"type": "String"
+			},
+			{
+				"name": "Kleinst�dtischer Raum",
+				"type": "String"
+			},
+			{
+				"name": "St�dtischer Raum",
+				"type": "String"
+			},
+			{
+				"name": "Ballungsraum",
+				"type": "String"
+			},
+			{
+				"name": "East Midlands",
+				"type": "String"
+			},
+			{
+				"name": "East of England",
+				"type": "String"
+			},
+			{
+				"name": "Greater London",
+				"type": "String"
+			},
+			{
+				"name": "North East England",
+				"type": "String"
+			},
+			{
+				"name": "North West England",
+				"type": "String"
+			},
+			{
+				"name": "Northern Ireland",
+				"type": "String"
+			},
+			{
+				"name": "Scotland",
+				"type": "String"
+			},
+			{
+				"name": "South East England",
+				"type": "String"
+			},
+			{
+				"name": "South West England",
+				"type": "String"
+			},
+			{
+				"name": "Wales",
+				"type": "String"
+			},
+			{
+				"name": "West Midlands",
+				"type": "String"
+			},
+			{
+				"name": "Yorkshire and The Humber",
 				"type": "String"
 			}
 		]
