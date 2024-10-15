@@ -1,0 +1,127 @@
+{
+	"name": "averageHoldingPeriodDE_copy1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CAP_DE_2019",
+						"type": "DatasetReference"
+					},
+					"name": "sourceDE2019"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_CN_2019",
+						"type": "DatasetReference"
+					},
+					"name": "sourceCN2019"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flowletDE2019",
+					"flowlet": {
+						"referenceName": "averageHoldingPeriodSource",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "'DE'",
+							"year": "'2019'"
+						}
+					}
+				},
+				{
+					"name": "flowletCN2019",
+					"flowlet": {
+						"referenceName": "averageHoldingPeriodSource",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "'CN'",
+							"year": "'2019'"
+						}
+					}
+				},
+				{
+					"name": "UnionAllData"
+				},
+				{
+					"name": "CreateDataArray"
+				},
+				{
+					"name": "AggregateToArray"
+				},
+				{
+					"name": "SelectDataArray"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          AverageHoldingPeriod as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sourceDE2019",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          AverageHoldingPeriod as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sourceCN2019",
+				"sourceDE2019 compose(mapParameter(",
+				"          market = 'DE',",
+				"          year = '2019'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName,",
+				"          GroupType,",
+				"          AverageHoldingPeriod",
+				"     ),",
+				"     composition: 'averageHoldingPeriodSource') ~> flowletDE2019@(output1)",
+				"sourceCN2019 compose(mapParameter(",
+				"          market = 'CN',",
+				"          year = '2019'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName,",
+				"          GroupType,",
+				"          AverageHoldingPeriod",
+				"     ),",
+				"     composition: 'averageHoldingPeriodSource') ~> flowletCN2019@(output1)",
+				"flowletDE2019@output1, flowletCN2019@output1 union(byName: true)~> UnionAllData",
+				"UnionAllData derive(data = @(market, year, model, male, female, all)) ~> CreateDataArray",
+				"CreateDataArray aggregate(groupBy(dummy = 1),",
+				"     data = collect(data)) ~> AggregateToArray",
+				"AggregateToArray select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> SelectDataArray",
+				"SelectDataArray sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:['averageHoldingPeriodChartDE.json'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
