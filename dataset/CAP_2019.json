@@ -1,5 +1,5 @@
 {
-	"name": "CAP",
+	"name": "CAP_2019",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage2",
@@ -9,10 +9,6 @@
 			"market": {
 				"type": "string",
 				"defaultValue": "DE"
-			},
-			"year": {
-				"type": "int",
-				"defaultValue": 2019
 			}
 		},
 		"annotations": [],
@@ -21,7 +17,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": {
-					"value": "@concat('C@P_', string(dataset().market), '_', string(dataset().year), '.csv')",
+					"value": "@concat('C@P_', string(dataset().market), '_2019.csv')",
 					"type": "Expression"
 				},
 				"container": "test-data"
