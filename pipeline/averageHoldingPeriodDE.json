@@ -16,8 +16,28 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "averageHoldingPeriodDE",
-						"type": "DataFlowReference"
+						"referenceName": "averageHoldingPeriod",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "'DE'"
+						},
+						"datasetParameters": {
+							"source2019": {
+								"market": "DE"
+							},
+							"source2020": {
+								"market": "DE"
+							},
+							"source2021": {
+								"market": "DE"
+							},
+							"source2022": {
+								"market": "DE"
+							},
+							"source2023": {
+								"market": "DE"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
@@ -27,6 +47,14 @@
 				}
 			}
 		],
+		"variables": {
+			"market": {
+				"type": "String"
+			},
+			"year": {
+				"type": "Integer"
+			}
+		},
 		"annotations": []
 	}
 }
