@@ -1,0 +1,107 @@
+{
+	"name": "averageHoldingPeriodSource",
+	"properties": {
+		"type": "Flowlet",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "SplitModelTypes"
+				},
+				{
+					"name": "DeriveGenderColumns"
+				},
+				{
+					"name": "DeriveModelColumns"
+				},
+				{
+					"name": "SelectModelAll"
+				},
+				{
+					"name": "AddModelTotalToGender"
+				},
+				{
+					"name": "AggregateGenderData"
+				},
+				{
+					"name": "DeriveEngineColumns"
+				},
+				{
+					"name": "union1"
+				},
+				{
+					"name": "input"
+				},
+				{
+					"name": "output1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     market as string (market),",
+				"     year as string (year)",
+				"}",
+				"input(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          AverageHoldingPeriod as double",
+				"     ),",
+				"     order: 0,",
+				"     allowSchemaDrift: true) ~> input",
+				"input split(GroupType == 'Model/Gender',",
+				"     GroupType == 'Model/Engine' || GroupType == 'Model/Body',",
+				"     GroupType == 'Model',",
+				"     disjoint: false) ~> SplitModelTypes@(ModelGender, ModelEngine, Model)",
+				"SplitModelTypes@ModelGender derive(market = $market,",
+				"          year = $year,",
+				"          variant = 'All',",
+				"          model = iif(GroupName == 'Porsche/Female' || GroupName == 'Porsche/Male', 'All Models',",
+				"      iif(locate(' ', split(GroupName, '/')[1]) > 0,",
+				"        concat(",
+				"           trim(split(split(GroupName, '/')[1], ' ')[1]),",
+				"           ' All ',",
+				"           trim(substring(split(GroupName, '/')[1], locate(' ', split(GroupName, '/')[1]) + 1, 100))",
+				"        ),",
+				"        concat(split(GroupName, '/')[1], ' All')",
+				"      )",
+				"    ),",
+				"          male = iif(endsWith(GroupName, '/Male'), AverageHoldingPeriod, toDouble(0)),",
+				"          female = iif(endsWith(GroupName, '/Female'), AverageHoldingPeriod, toDouble(0))) ~> DeriveGenderColumns",
+				"SplitModelTypes@Model derive(ModelName = iif(GroupName == 'Porsche', 'All Models',",
+				"      iif(locate(' ', GroupName) > 0,",
+				"        concat(",
+				"           trim(split(GroupName, ' ')[1]),",
+				"           ' All ',",
+				"           trim(substring(GroupName, locate(' ', GroupName) + 1, 100))",
+				"        ),",
+				"        concat(GroupName, ' All')",
+				"      )",
+				"    ),",
+				"          ModelTotal = AverageHoldingPeriod) ~> DeriveModelColumns",
+				"DeriveModelColumns select(mapColumn(",
+				"          ModelName,",
+				"          ModelAll = ModelTotal",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectModelAll",
+				"DeriveGenderColumns, SelectModelAll lookup(model == ModelName,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> AddModelTotalToGender",
+				"AddModelTotalToGender aggregate(groupBy(market,",
+				"          year,",
+				"          model),",
+				"     male = max(male),",
+				"          female = max(female),",
+				"          all = max(ModelAll)) ~> AggregateGenderData",
+				"SplitModelTypes@ModelEngine derive(market = $market,",
+				"          year = $year,",
+				"          model = replace(GroupName, '/', ' '),",
+				"          all = AverageHoldingPeriod) ~> DeriveEngineColumns",
+				"AggregateGenderData, DeriveEngineColumns union(byName: true)~> union1",
+				"union1 output() ~> output1"
+			]
+		}
+	}
+}
