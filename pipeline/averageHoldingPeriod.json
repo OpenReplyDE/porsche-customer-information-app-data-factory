@@ -1,0 +1,99 @@
+{
+	"name": "averageHoldingPeriod",
+	"properties": {
+		"activities": [
+			{
+				"name": "forEachMarket",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "[\"DE\",\"CN\",\"UK\",\"US\"]",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "averageHoldingPeriod",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "averageHoldingPeriod",
+									"type": "DataFlowReference",
+									"datasetParameters": {
+										"source2019": {
+											"market": "DE"
+										},
+										"source2020": {
+											"market": "DE"
+										},
+										"source2021": {
+											"market": "DE"
+										},
+										"source2022": {
+											"market": "DE"
+										},
+										"source2023": {
+											"market": "DE"
+										}
+									},
+									"linkedServiceParameters": {
+										"source2019": {
+											"schemaLinkedService": {
+												"market": "DE"
+											}
+										},
+										"source2020": {
+											"schemaLinkedService": {
+												"market": "DE"
+											}
+										},
+										"source2021": {
+											"schemaLinkedService": {
+												"market": "DE"
+											}
+										},
+										"source2022": {
+											"schemaLinkedService": {
+												"market": "DE"
+											}
+										},
+										"source2023": {
+											"schemaLinkedService": {
+												"market": "DE"
+											}
+										}
+									}
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Fine"
+							}
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"market": {
+				"type": "String"
+			},
+			"year": {
+				"type": "Integer"
+			}
+		},
+		"annotations": []
+	}
+}
