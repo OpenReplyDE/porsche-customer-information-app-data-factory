@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "averageHoldingPeriodDE",
+				"name": "averageHoldingPeriod",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
