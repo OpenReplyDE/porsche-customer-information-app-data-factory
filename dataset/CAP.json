@@ -21,7 +21,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": {
-					"value": "concat(\"C@P_\", dataset().market, \"_\", string(dataset().year), \".csv\")",
+					"value": "@concat('C@P_', string(dataset().market), '_', string(dataset().year), '.csv')",
 					"type": "Expression"
 				},
 				"container": "test-data"
