@@ -20,7 +20,275 @@
 		},
 		"schema": [
 			{
-				"name": "GroupName;GroupType;AverageExistingCustomerAge;ExistingCustomerAge=0-30;ExistingCustomerAge=30-50;ExistingCustomerAge=50-100;ShareOfMen;ShareOfWomen;AverageHoldingPeriod;AverageNumberOfPorscheInPossession;PorscheInPossession=1;PorscheInPossession=2;PorscheInPossession=3;PorscheInPossession>=4;FirstTimeBuyerRate;ChurnRate;ConquestRate;Alabama;Alaska;Arizona;Arkansas;California;Colorado;Connecticut;Delaware;District of Columbia;Florida;Georgia;Hawaii;Idaho;Illinois;Indiana;Iowa;Kansas;Kentucky;Louisiana;Maine;Maryland;Massachusetts;Michigan;Minnesota;Mississippi;Missouri;Montana;Nebraska;Nevada;New Hampshire;New Jersey;New Mexico;New York;North Carolina;North Dakota;Ohio;Oklahoma;Oregon;Pennsylvania;Rhode Island;South Carolina;South Dakota;Tennessee;Texas;Utah;Vermont;Virginia;Washington;West Virginia;Wisconsin;Wyoming",
+				"name": "GroupName",
+				"type": "String"
+			},
+			{
+				"name": "GroupType",
+				"type": "String"
+			},
+			{
+				"name": "AverageExistingCustomerAge",
+				"type": "String"
+			},
+			{
+				"name": "ExistingCustomerAge=0-30",
+				"type": "String"
+			},
+			{
+				"name": "ExistingCustomerAge=30-50",
+				"type": "String"
+			},
+			{
+				"name": "ExistingCustomerAge=50-100",
+				"type": "String"
+			},
+			{
+				"name": "ShareOfMen",
+				"type": "String"
+			},
+			{
+				"name": "ShareOfWomen",
+				"type": "String"
+			},
+			{
+				"name": "AverageHoldingPeriod",
+				"type": "String"
+			},
+			{
+				"name": "AverageNumberOfPorscheInPossession",
+				"type": "String"
+			},
+			{
+				"name": "PorscheInPossession=1",
+				"type": "String"
+			},
+			{
+				"name": "PorscheInPossession=2",
+				"type": "String"
+			},
+			{
+				"name": "PorscheInPossession=3",
+				"type": "String"
+			},
+			{
+				"name": "PorscheInPossession>=4",
+				"type": "String"
+			},
+			{
+				"name": "FirstTimeBuyerRate",
+				"type": "String"
+			},
+			{
+				"name": "ChurnRate",
+				"type": "String"
+			},
+			{
+				"name": "ConquestRate",
+				"type": "String"
+			},
+			{
+				"name": "Alabama",
+				"type": "String"
+			},
+			{
+				"name": "Alaska",
+				"type": "String"
+			},
+			{
+				"name": "Arizona",
+				"type": "String"
+			},
+			{
+				"name": "Arkansas",
+				"type": "String"
+			},
+			{
+				"name": "California",
+				"type": "String"
+			},
+			{
+				"name": "Colorado",
+				"type": "String"
+			},
+			{
+				"name": "Connecticut",
+				"type": "String"
+			},
+			{
+				"name": "Delaware",
+				"type": "String"
+			},
+			{
+				"name": "District of Columbia",
+				"type": "String"
+			},
+			{
+				"name": "Florida",
+				"type": "String"
+			},
+			{
+				"name": "Georgia",
+				"type": "String"
+			},
+			{
+				"name": "Hawaii",
+				"type": "String"
+			},
+			{
+				"name": "Idaho",
+				"type": "String"
+			},
+			{
+				"name": "Illinois",
+				"type": "String"
+			},
+			{
+				"name": "Indiana",
+				"type": "String"
+			},
+			{
+				"name": "Iowa",
+				"type": "String"
+			},
+			{
+				"name": "Kansas",
+				"type": "String"
+			},
+			{
+				"name": "Kentucky",
+				"type": "String"
+			},
+			{
+				"name": "Louisiana",
+				"type": "String"
+			},
+			{
+				"name": "Maine",
+				"type": "String"
+			},
+			{
+				"name": "Maryland",
+				"type": "String"
+			},
+			{
+				"name": "Massachusetts",
+				"type": "String"
+			},
+			{
+				"name": "Michigan",
+				"type": "String"
+			},
+			{
+				"name": "Minnesota",
+				"type": "String"
+			},
+			{
+				"name": "Mississippi",
+				"type": "String"
+			},
+			{
+				"name": "Missouri",
+				"type": "String"
+			},
+			{
+				"name": "Montana",
+				"type": "String"
+			},
+			{
+				"name": "Nebraska",
+				"type": "String"
+			},
+			{
+				"name": "Nevada",
+				"type": "String"
+			},
+			{
+				"name": "New Hampshire",
+				"type": "String"
+			},
+			{
+				"name": "New Jersey",
+				"type": "String"
+			},
+			{
+				"name": "New Mexico",
+				"type": "String"
+			},
+			{
+				"name": "New York",
+				"type": "String"
+			},
+			{
+				"name": "North Carolina",
+				"type": "String"
+			},
+			{
+				"name": "North Dakota",
+				"type": "String"
+			},
+			{
+				"name": "Ohio",
+				"type": "String"
+			},
+			{
+				"name": "Oklahoma",
+				"type": "String"
+			},
+			{
+				"name": "Oregon",
+				"type": "String"
+			},
+			{
+				"name": "Pennsylvania",
+				"type": "String"
+			},
+			{
+				"name": "Rhode Island",
+				"type": "String"
+			},
+			{
+				"name": "South Carolina",
+				"type": "String"
+			},
+			{
+				"name": "South Dakota",
+				"type": "String"
+			},
+			{
+				"name": "Tennessee",
+				"type": "String"
+			},
+			{
+				"name": "Texas",
+				"type": "String"
+			},
+			{
+				"name": "Utah",
+				"type": "String"
+			},
+			{
+				"name": "Vermont",
+				"type": "String"
+			},
+			{
+				"name": "Virginia",
+				"type": "String"
+			},
+			{
+				"name": "Washington",
+				"type": "String"
+			},
+			{
+				"name": "West Virginia",
+				"type": "String"
+			},
+			{
+				"name": "Wisconsin",
+				"type": "String"
+			},
+			{
+				"name": "Wyoming",
 				"type": "String"
 			}
 		]
