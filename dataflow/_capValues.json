@@ -16,6 +16,15 @@
 					"name": "DeriveModelColumns"
 				},
 				{
+					"name": "SelectModelAll"
+				},
+				{
+					"name": "AddModelTotalToGender"
+				},
+				{
+					"name": "AggregateGenderData"
+				},
+				{
 					"name": "DeriveEngineColumns"
 				},
 				{
@@ -25,7 +34,7 @@
 					"name": "input"
 				},
 				{
-					"name": "output1"
+					"name": "output"
 				}
 			],
 			"scriptLines": [
@@ -65,20 +74,36 @@
 				"        concat(",
 				"           trim(split(GroupName, ' ')[1]),",
 				"           ' All ',",
-				"           trim(substring(GroupName, locate(' ', GroupName) + 1))",
+				"           trim(substring(GroupName, locate(' ', GroupName) + 1, 100))",
 				"        ),",
 				"        concat(GroupName, ' All')",
 				"      )",
 				"    ),",
 				"          male = value_male,",
 				"          female = value_female) ~> DeriveModelColumns",
+				"DeriveModelColumns select(mapColumn(",
+				"          ModelName,",
+				"          male,",
+				"          female",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectModelAll",
+				"DeriveGenderColumns, SelectModelAll lookup(model == ModelName,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> AddModelTotalToGender",
+				"AddModelTotalToGender aggregate(groupBy(market,",
+				"          year,",
+				"          model),",
+				"     male = max(male),",
+				"          female = max(female)) ~> AggregateGenderData",
 				"SplitModelTypes@ModelEngine derive(market = $market,",
 				"          year = $year,",
 				"          model = replace(GroupName, '/', ' '),",
 				"          male = value_male,",
 				"          female = value_female) ~> DeriveEngineColumns",
-				"DeriveGenderColumns, DeriveEngineColumns, DeriveModelColumns union(byName: true)~> union",
-				"union output() ~> output1"
+				"AggregateGenderData, DeriveEngineColumns union(byName: true)~> union",
+				"union output() ~> output"
 			]
 		}
 	}
