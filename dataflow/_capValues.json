@@ -13,9 +13,6 @@
 					"name": "DeriveModelColumns"
 				},
 				{
-					"name": "SelectModelAll"
-				},
-				{
 					"name": "AggregateGenderData"
 				},
 				{
@@ -47,26 +44,12 @@
 				"input split(GroupType == 'Model/Engine' || GroupType == 'Model/Body',",
 				"     GroupType == 'Model',",
 				"     disjoint: false) ~> SplitModelTypes@(ModelEngine, Model)",
-				"SplitModelTypes@Model derive(ModelName = iif(GroupName == 'Porsche', 'All Models',",
-				"      iif(locate(' ', GroupName) > 0,",
-				"        concat(",
-				"           trim(split(GroupName, ' ')[1]),",
-				"           ' All ',",
-				"           trim(substring(GroupName, locate(' ', GroupName) + 1, 100))",
-				"        ),",
-				"        concat(GroupName, ' All')",
-				"      )",
-				"    ),",
+				"SplitModelTypes@Model derive(market = $market,",
+				"          year = $year,",
+				"          model = iif(GroupName == 'Porsche', 'All Models',      iif(locate(' ', GroupName) > 0,        concat(           trim(split(GroupName, ' ')[1]),           ' All ',           trim(substring(GroupName, locate(' ', GroupName) + 1, 100))        ),        concat(GroupName, ' All')      )    ),",
 				"          male = value_male,",
 				"          female = value_female) ~> DeriveModelColumns",
-				"DeriveModelColumns select(mapColumn(",
-				"          ModelName,",
-				"          male,",
-				"          female",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectModelAll",
-				"SelectModelAll aggregate(groupBy(market,",
+				"DeriveModelColumns aggregate(groupBy(market,",
 				"          year,",
 				"          model),",
 				"     male = max(male),",
