@@ -112,10 +112,10 @@
 					"name": "CreateDataArray"
 				},
 				{
-					"name": "AggregateToArray"
+					"name": "aggregate"
 				},
 				{
-					"name": "SelectDataArray"
+					"name": "select"
 				}
 			],
 			"scriptLines": [
@@ -215,13 +215,13 @@
 				"capAverage2019@output1, capAverage2020@output1, capAverage2021@output1, capAverage2022@output1, capAverage2023@output1 union(byName: true)~> UnionAllData",
 				"UnionAllData derive(data = @(market, year, model, male, female, all)) ~> CreateDataArray",
 				"CreateDataArray aggregate(groupBy(dummy = 1),",
-				"     data = collect(data)) ~> AggregateToArray",
-				"AggregateToArray select(mapColumn(",
+				"     data = collect(data)) ~> aggregate",
+				"aggregate select(mapColumn(",
 				"          data",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> SelectDataArray",
-				"SelectDataArray sink(allowSchemaDrift: true,",
+				"     skipDuplicateMapOutputs: false) ~> select",
+				"select sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
