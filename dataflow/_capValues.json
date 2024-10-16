@@ -1,5 +1,5 @@
 {
-	"name": "_capAverage",
+	"name": "_capValues",
 	"properties": {
 		"type": "Flowlet",
 		"typeProperties": {
