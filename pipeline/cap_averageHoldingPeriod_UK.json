@@ -1,5 +1,5 @@
 {
-	"name": "averageHoldingPeriodUK",
+	"name": "cap_averageHoldingPeriod_UK",
 	"properties": {
 		"activities": [
 			{
@@ -16,13 +16,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "averageHoldingPeriod",
+						"referenceName": "cap_averageHoldingPeriod",
 						"type": "DataFlowReference",
 						"parameters": {
-							"market": {
-								"value": "'@{'UK'}'",
-								"type": "Expression"
-							}
+							"market": "'UK'"
 						},
 						"datasetParameters": {
 							"source2019": {
