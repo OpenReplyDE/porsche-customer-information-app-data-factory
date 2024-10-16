@@ -1,5 +1,5 @@
 {
-	"name": "averageHoldingPeriodCN",
+	"name": "cap_averageHoldingPeriod_CN",
 	"properties": {
 		"activities": [
 			{
@@ -16,13 +16,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "averageHoldingPeriod",
+						"referenceName": "cap_averageHoldingPeriod",
 						"type": "DataFlowReference",
 						"parameters": {
-							"market": {
-								"value": "'@{'CN'}'",
-								"type": "Expression"
-							}
+							"market": "'CN'"
 						},
 						"datasetParameters": {
 							"source2019": {
