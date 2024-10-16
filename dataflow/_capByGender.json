@@ -1,5 +1,5 @@
 {
-	"name": "_capValues",
+	"name": "_capByGender",
 	"properties": {
 		"type": "Flowlet",
 		"typeProperties": {

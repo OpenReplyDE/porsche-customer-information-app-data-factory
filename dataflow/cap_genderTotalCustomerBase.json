@@ -53,7 +53,7 @@
 				{
 					"name": "capValues2019",
 					"flowlet": {
-						"referenceName": "_capValues",
+						"referenceName": "_capByGender",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -64,7 +64,7 @@
 				{
 					"name": "capValues2020",
 					"flowlet": {
-						"referenceName": "_capValues",
+						"referenceName": "_capByGender",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -75,7 +75,7 @@
 				{
 					"name": "capValues2021",
 					"flowlet": {
-						"referenceName": "_capValues",
+						"referenceName": "_capByGender",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -86,7 +86,7 @@
 				{
 					"name": "capValues2022",
 					"flowlet": {
-						"referenceName": "_capValues",
+						"referenceName": "_capByGender",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -97,7 +97,7 @@
 				{
 					"name": "capValues2023",
 					"flowlet": {
-						"referenceName": "_capValues",
+						"referenceName": "_capByGender",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -177,7 +177,7 @@
 				"          value_male = ShareOfMen,",
 				"          value_female = ShareOfWomen",
 				"     ),",
-				"     composition: '_capValues') ~> capValues2019@(output)",
+				"     composition: '_capByGender') ~> capValues2019@(output)",
 				"source2020 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2020'",
@@ -188,7 +188,7 @@
 				"          value_male = ShareOfMen,",
 				"          value_female = ShareOfWomen",
 				"     ),",
-				"     composition: '_capValues') ~> capValues2020@(output)",
+				"     composition: '_capByGender') ~> capValues2020@(output)",
 				"source2021 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2021'",
@@ -199,7 +199,7 @@
 				"          value_male = ShareOfMen,",
 				"          value_female = ShareOfWomen",
 				"     ),",
-				"     composition: '_capValues') ~> capValues2021@(output)",
+				"     composition: '_capByGender') ~> capValues2021@(output)",
 				"source2022 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2022'",
@@ -210,7 +210,7 @@
 				"          value_male = ShareOfMen,",
 				"          value_female = ShareOfWomen",
 				"     ),",
-				"     composition: '_capValues') ~> capValues2022@(output)",
+				"     composition: '_capByGender') ~> capValues2022@(output)",
 				"source2023 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2023'",
@@ -221,7 +221,7 @@
 				"          value_male = ShareOfMen,",
 				"          value_female = ShareOfWomen",
 				"     ),",
-				"     composition: '_capValues') ~> capValues2023@(output)",
+				"     composition: '_capByGender') ~> capValues2023@(output)",
 				"capValues2019@output, capValues2020@output, capValues2021@output, capValues2022@output, capValues2023@output union(byName: true)~> UnionAllData",
 				"UnionAllData derive(data = @(market, year, model, male, female)) ~> CreateDataArray",
 				"CreateDataArray aggregate(groupBy(dummy = 1),",
