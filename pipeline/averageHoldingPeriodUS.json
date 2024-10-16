@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "averageHoldingPeriodUS",
+				"name": "averageHoldingPeriod",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,8 +16,31 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "averageHoldingPeriodUS",
-						"type": "DataFlowReference"
+						"referenceName": "averageHoldingPeriod",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": {
+								"value": "'@{'US'}'",
+								"type": "Expression"
+							}
+						},
+						"datasetParameters": {
+							"source2019": {
+								"market": "US"
+							},
+							"source2020": {
+								"market": "US"
+							},
+							"source2021": {
+								"market": "US"
+							},
+							"source2022": {
+								"market": "US"
+							},
+							"source2023": {
+								"market": "US"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
