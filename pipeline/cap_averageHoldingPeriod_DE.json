@@ -1,5 +1,5 @@
 {
-	"name": "averageHoldingPeriodDE",
+	"name": "cap_averageHoldingPeriod_DE",
 	"properties": {
 		"activities": [
 			{
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "averageHoldingPeriod",
+						"referenceName": "cap_averageHoldingPeriod",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "'DE'"
