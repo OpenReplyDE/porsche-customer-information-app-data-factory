@@ -1,5 +1,5 @@
 {
-	"name": "averageHoldingPeriodSource",
+	"name": "collectCapData",
 	"properties": {
 		"type": "Flowlet",
 		"typeProperties": {
@@ -45,7 +45,7 @@
 				"input(output(",
 				"          GroupName as string,",
 				"          GroupType as string,",
-				"          AverageHoldingPeriod as double",
+				"          value as double",
 				"     ),",
 				"     order: 0,",
 				"     allowSchemaDrift: true) ~> input",
@@ -66,8 +66,8 @@
 				"        concat(split(GroupName, '/')[1], ' All')",
 				"      )",
 				"    ),",
-				"          male = iif(endsWith(GroupName, '/Male'), AverageHoldingPeriod, toDouble(0)),",
-				"          female = iif(endsWith(GroupName, '/Female'), AverageHoldingPeriod, toDouble(0))) ~> DeriveGenderColumns",
+				"          male = iif(endsWith(GroupName, '/Male'), value, toDouble(0)),",
+				"          female = iif(endsWith(GroupName, '/Female'), value, toDouble(0))) ~> DeriveGenderColumns",
 				"SplitModelTypes@Model derive(ModelName = iif(GroupName == 'Porsche', 'All Models',",
 				"      iif(locate(' ', GroupName) > 0,",
 				"        concat(",
@@ -78,7 +78,7 @@
 				"        concat(GroupName, ' All')",
 				"      )",
 				"    ),",
-				"          ModelTotal = AverageHoldingPeriod) ~> DeriveModelColumns",
+				"          ModelTotal = value) ~> DeriveModelColumns",
 				"DeriveModelColumns select(mapColumn(",
 				"          ModelName,",
 				"          ModelAll = ModelTotal",
@@ -98,7 +98,7 @@
 				"SplitModelTypes@ModelEngine derive(market = $market,",
 				"          year = $year,",
 				"          model = replace(GroupName, '/', ' '),",
-				"          all = AverageHoldingPeriod) ~> DeriveEngineColumns",
+				"          all = value) ~> DeriveEngineColumns",
 				"AggregateGenderData, DeriveEngineColumns union(byName: true)~> union1",
 				"union1 output() ~> output1"
 			]
