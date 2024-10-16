@@ -7,8 +7,7 @@
 		},
 		"parameters": {
 			"market": {
-				"type": "string",
-				"defaultValue": "DE"
+				"type": "string"
 			}
 		},
 		"annotations": [],
