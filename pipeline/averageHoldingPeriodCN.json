@@ -19,7 +19,10 @@
 						"referenceName": "averageHoldingPeriod",
 						"type": "DataFlowReference",
 						"parameters": {
-							"market": "'CN'"
+							"market": {
+								"value": "'@{'CN'}'",
+								"type": "Expression"
+							}
 						},
 						"datasetParameters": {
 							"source2019": {
