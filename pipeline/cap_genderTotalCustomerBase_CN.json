@@ -1,5 +1,5 @@
 {
-	"name": "totalCustomerBaseGenderDataCN",
+	"name": "cap_genderTotalCustomerBase_CN",
 	"properties": {
 		"activities": [
 			{
@@ -16,8 +16,28 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "totalCustomerBaseGenderDataCN",
-						"type": "DataFlowReference"
+						"referenceName": "cap_genderTotalCustomerBase",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "'CN'"
+						},
+						"datasetParameters": {
+							"source2019": {
+								"market": "CN"
+							},
+							"source2020": {
+								"market": "CN"
+							},
+							"source2021": {
+								"market": "CN"
+							},
+							"source2022": {
+								"market": "CN"
+							},
+							"source2023": {
+								"market": "CN"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
