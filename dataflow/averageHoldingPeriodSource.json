@@ -39,8 +39,8 @@
 			],
 			"scriptLines": [
 				"parameters{",
-				"     market as string (market),",
-				"     year as string (year)",
+				"     market as string,",
+				"     year as string",
 				"}",
 				"input(output(",
 				"          GroupName as string,",
