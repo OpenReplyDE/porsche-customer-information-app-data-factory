@@ -13,6 +13,9 @@
 					"name": "select"
 				},
 				{
+					"name": "deriveData"
+				},
+				{
 					"name": "input"
 				},
 				{
@@ -20,18 +23,22 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     fields as string",
+				"}",
 				"input(output(",
 				"          data as ()",
 				"     ),",
 				"     order: 0,",
 				"     allowSchemaDrift: true) ~> input",
-				"input aggregate(groupBy(dummy = 1),",
+				"deriveData aggregate(groupBy(dummy = 1),",
 				"     data = collect(data)) ~> aggregate",
 				"aggregate select(mapColumn(",
 				"          data",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select",
+				"input derive(data = $fields) ~> deriveData",
 				"select output() ~> output"
 			]
 		}
