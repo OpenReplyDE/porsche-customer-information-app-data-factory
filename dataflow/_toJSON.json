@@ -1,0 +1,39 @@
+{
+	"name": "_toJSON",
+	"properties": {
+		"type": "Flowlet",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "aggregate"
+				},
+				{
+					"name": "select"
+				},
+				{
+					"name": "input"
+				},
+				{
+					"name": "output"
+				}
+			],
+			"scriptLines": [
+				"input(output(",
+				"          data as ()",
+				"     ),",
+				"     order: 0,",
+				"     allowSchemaDrift: true) ~> input",
+				"input aggregate(groupBy(dummy = 1),",
+				"     data = collect(data)) ~> aggregate",
+				"aggregate select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select",
+				"select output() ~> output"
+			]
+		}
+	}
+}
