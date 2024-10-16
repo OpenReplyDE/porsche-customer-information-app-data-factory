@@ -16,8 +16,31 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "averageHoldingPeriodUK",
-						"type": "DataFlowReference"
+						"referenceName": "averageHoldingPeriod",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": {
+								"value": "'@{'UK'}'",
+								"type": "Expression"
+							}
+						},
+						"datasetParameters": {
+							"source2019": {
+								"market": "UK"
+							},
+							"source2020": {
+								"market": "UK"
+							},
+							"source2021": {
+								"market": "UK"
+							},
+							"source2022": {
+								"market": "UK"
+							},
+							"source2023": {
+								"market": "UK"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
