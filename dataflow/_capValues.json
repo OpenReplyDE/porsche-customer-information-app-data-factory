@@ -55,7 +55,6 @@
 				"     disjoint: false) ~> SplitModelTypes@(ModelGender, ModelEngine, Model)",
 				"SplitModelTypes@ModelGender derive(market = $market,",
 				"          year = $year,",
-				"          variant = 'All',",
 				"          model = iif(GroupName == 'Porsche/Female' || GroupName == 'Porsche/Male', 'All Models',",
 				"      iif(locate(' ', split(GroupName, '/')[1]) > 0,",
 				"        concat(",
