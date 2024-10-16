@@ -1,5 +1,5 @@
 {
-	"name": "collectCapData",
+	"name": "_capAverage",
 	"properties": {
 		"type": "Flowlet",
 		"typeProperties": {
