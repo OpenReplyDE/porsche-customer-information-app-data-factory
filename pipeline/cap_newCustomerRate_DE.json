@@ -1,5 +1,5 @@
 {
-	"name": "newCustomerRateDE",
+	"name": "cap_newCustomerRate_DE",
 	"properties": {
 		"activities": [
 			{
@@ -16,8 +16,28 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "newCustomerRateDE",
-						"type": "DataFlowReference"
+						"referenceName": "cap_newCustomerRate",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "'DE'"
+						},
+						"datasetParameters": {
+							"source2019": {
+								"market": "DE"
+							},
+							"source2020": {
+								"market": "DE"
+							},
+							"source2021": {
+								"market": "DE"
+							},
+							"source2022": {
+								"market": "DE"
+							},
+							"source2023": {
+								"market": "DE"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
