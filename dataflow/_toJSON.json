@@ -30,8 +30,8 @@
 				"aggregate select(mapColumn(",
 				"          data",
 				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select",
 				"select output() ~> output"
 			]
 		}
