@@ -51,9 +51,9 @@
 			],
 			"transformations": [
 				{
-					"name": "flowlet2019",
+					"name": "collectCap2019",
 					"flowlet": {
-						"referenceName": "averageHoldingPeriodSource",
+						"referenceName": "collectCapData",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -62,9 +62,9 @@
 					}
 				},
 				{
-					"name": "flowlet2020",
+					"name": "collectCap2020",
 					"flowlet": {
-						"referenceName": "averageHoldingPeriodSource",
+						"referenceName": "collectCapData",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -73,9 +73,9 @@
 					}
 				},
 				{
-					"name": "flowlet2021",
+					"name": "collectCap2021",
 					"flowlet": {
-						"referenceName": "averageHoldingPeriodSource",
+						"referenceName": "collectCapData",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -84,9 +84,9 @@
 					}
 				},
 				{
-					"name": "flowlet2022",
+					"name": "collectCap2022",
 					"flowlet": {
-						"referenceName": "averageHoldingPeriodSource",
+						"referenceName": "collectCapData",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "toString($market)",
@@ -95,9 +95,9 @@
 					}
 				},
 				{
-					"name": "flowlet2023",
+					"name": "collectCap2023",
 					"flowlet": {
-						"referenceName": "averageHoldingPeriodSource",
+						"referenceName": "collectCapData",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -747,9 +747,9 @@
 				"     mapColumn(",
 				"          GroupName,",
 				"          GroupType,",
-				"          AverageHoldingPeriod",
+				"          value = GroupName",
 				"     ),",
-				"     composition: 'averageHoldingPeriodSource') ~> flowlet2019@(output1)",
+				"     composition: 'collectCapData') ~> collectCap2019@(output1)",
 				"source2020 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2020'",
@@ -757,9 +757,9 @@
 				"     mapColumn(",
 				"          GroupName,",
 				"          GroupType,",
-				"          AverageHoldingPeriod",
+				"          value = GroupName",
 				"     ),",
-				"     composition: 'averageHoldingPeriodSource') ~> flowlet2020@(output1)",
+				"     composition: 'collectCapData') ~> collectCap2020@(output1)",
 				"source2021 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2021'",
@@ -767,9 +767,9 @@
 				"     mapColumn(",
 				"          GroupName,",
 				"          GroupType,",
-				"          AverageHoldingPeriod",
+				"          value = GroupName",
 				"     ),",
-				"     composition: 'averageHoldingPeriodSource') ~> flowlet2021@(output1)",
+				"     composition: 'collectCapData') ~> collectCap2021@(output1)",
 				"source2022 compose(mapParameter(",
 				"          market = toString($market),",
 				"          year = '2022'",
@@ -777,9 +777,9 @@
 				"     mapColumn(",
 				"          GroupName,",
 				"          GroupType,",
-				"          AverageHoldingPeriod",
+				"          value = GroupName",
 				"     ),",
-				"     composition: 'averageHoldingPeriodSource') ~> flowlet2022@(output1)",
+				"     composition: 'collectCapData') ~> collectCap2022@(output1)",
 				"source2023 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2023'",
@@ -787,10 +787,10 @@
 				"     mapColumn(",
 				"          GroupName,",
 				"          GroupType,",
-				"          AverageHoldingPeriod",
+				"          value = GroupName",
 				"     ),",
-				"     composition: 'averageHoldingPeriodSource') ~> flowlet2023@(output1)",
-				"flowlet2019@output1, flowlet2020@output1, flowlet2021@output1, flowlet2022@output1, flowlet2023@output1 union(byName: true)~> UnionAllData",
+				"     composition: 'collectCapData') ~> collectCap2023@(output1)",
+				"collectCap2019@output1, collectCap2020@output1, collectCap2021@output1, collectCap2022@output1, collectCap2023@output1 union(byName: true)~> UnionAllData",
 				"UnionAllData derive(data = @(market, year, model, male, female, all)) ~> CreateDataArray",
 				"CreateDataArray aggregate(groupBy(dummy = 1),",
 				"     data = collect(data)) ~> AggregateToArray",
