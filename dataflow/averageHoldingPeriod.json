@@ -56,7 +56,7 @@
 						"referenceName": "averageHoldingPeriodSource",
 						"type": "DataFlowReference",
 						"parameters": {
-							"market": "market",
+							"market": "$market",
 							"year": "'2019'"
 						}
 					}
@@ -67,7 +67,7 @@
 						"referenceName": "averageHoldingPeriodSource",
 						"type": "DataFlowReference",
 						"parameters": {
-							"market": "market",
+							"market": "$market",
 							"year": "'2020'"
 						}
 					}
@@ -78,7 +78,7 @@
 						"referenceName": "averageHoldingPeriodSource",
 						"type": "DataFlowReference",
 						"parameters": {
-							"market": "market",
+							"market": "$market",
 							"year": "'2021'"
 						}
 					}
@@ -89,7 +89,7 @@
 						"referenceName": "averageHoldingPeriodSource",
 						"type": "DataFlowReference",
 						"parameters": {
-							"market": "market",
+							"market": "toString($market)",
 							"year": "'2022'"
 						}
 					}
@@ -100,7 +100,7 @@
 						"referenceName": "averageHoldingPeriodSource",
 						"type": "DataFlowReference",
 						"parameters": {
-							"market": "market",
+							"market": "$market",
 							"year": "'2023'"
 						}
 					}
@@ -120,7 +120,7 @@
 			],
 			"scriptLines": [
 				"parameters{",
-				"     market as string ('DE')",
+				"     market as string",
 				"}",
 				"source(output(",
 				"          GroupName as string,",
@@ -741,7 +741,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source2023",
 				"source2019 compose(mapParameter(",
-				"          market = market,",
+				"          market = $market,",
 				"          year = '2019'",
 				"     ),",
 				"     mapColumn(",
@@ -751,7 +751,7 @@
 				"     ),",
 				"     composition: 'averageHoldingPeriodSource') ~> flowlet2019@(output1)",
 				"source2020 compose(mapParameter(",
-				"          market = market,",
+				"          market = $market,",
 				"          year = '2020'",
 				"     ),",
 				"     mapColumn(",
@@ -761,7 +761,7 @@
 				"     ),",
 				"     composition: 'averageHoldingPeriodSource') ~> flowlet2020@(output1)",
 				"source2021 compose(mapParameter(",
-				"          market = market,",
+				"          market = $market,",
 				"          year = '2021'",
 				"     ),",
 				"     mapColumn(",
@@ -771,7 +771,7 @@
 				"     ),",
 				"     composition: 'averageHoldingPeriodSource') ~> flowlet2021@(output1)",
 				"source2022 compose(mapParameter(",
-				"          market = market,",
+				"          market = toString($market),",
 				"          year = '2022'",
 				"     ),",
 				"     mapColumn(",
@@ -781,7 +781,7 @@
 				"     ),",
 				"     composition: 'averageHoldingPeriodSource') ~> flowlet2022@(output1)",
 				"source2023 compose(mapParameter(",
-				"          market = market,",
+				"          market = $market,",
 				"          year = '2023'",
 				"     ),",
 				"     mapColumn(",
@@ -809,6 +809,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
 				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
