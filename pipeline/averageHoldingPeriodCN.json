@@ -19,7 +19,7 @@
 						"referenceName": "averageHoldingPeriod",
 						"type": "DataFlowReference",
 						"parameters": {
-							"market": "'DE'"
+							"market": "'CN'"
 						},
 						"datasetParameters": {
 							"source2019": {
@@ -47,6 +47,14 @@
 				}
 			}
 		],
+		"variables": {
+			"market": {
+				"type": "String"
+			},
+			"year": {
+				"type": "Integer"
+			}
+		},
 		"annotations": []
 	}
 }
