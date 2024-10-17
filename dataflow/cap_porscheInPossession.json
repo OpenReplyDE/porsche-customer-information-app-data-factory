@@ -1,0 +1,296 @@
+{
+	"name": "cap_porscheInPossession",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CAP_2019",
+						"type": "DatasetReference"
+					},
+					"name": "source2019"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_2020",
+						"type": "DatasetReference"
+					},
+					"name": "source2020"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_2021",
+						"type": "DatasetReference"
+					},
+					"name": "source2021"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_2022",
+						"type": "DatasetReference"
+					},
+					"name": "source2022"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_2023",
+						"type": "DatasetReference"
+					},
+					"name": "source2023"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "capValues2019",
+					"flowlet": {
+						"referenceName": "_capValues",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "$market",
+							"year": "'2019'"
+						}
+					}
+				},
+				{
+					"name": "capValues2020",
+					"flowlet": {
+						"referenceName": "_capValues",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "$market",
+							"year": "'2020'"
+						}
+					}
+				},
+				{
+					"name": "capValues2021",
+					"flowlet": {
+						"referenceName": "_capValues",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "$market",
+							"year": "'2021'"
+						}
+					}
+				},
+				{
+					"name": "capValues2022",
+					"flowlet": {
+						"referenceName": "_capValues",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "$market",
+							"year": "'2022'"
+						}
+					}
+				},
+				{
+					"name": "capValues2023",
+					"flowlet": {
+						"referenceName": "_capValues",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "$market",
+							"year": "'2023'"
+						}
+					}
+				},
+				{
+					"name": "UnionAllData"
+				},
+				{
+					"name": "CreateDataArray"
+				},
+				{
+					"name": "aggregate"
+				},
+				{
+					"name": "select"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     market as string",
+				"}",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          {PorscheInPossession=1} as double,",
+				"          {PorscheInPossession=2} as double,",
+				"          {PorscheInPossession=3} as double,",
+				"          {PorscheInPossession>=4} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2019",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          {PorscheInPossession=1} as double,",
+				"          {PorscheInPossession=2} as double,",
+				"          {PorscheInPossession=3} as double,",
+				"          {PorscheInPossession>=4} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2020",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          {PorscheInPossession=1} as double,",
+				"          {PorscheInPossession=2} as double,",
+				"          {PorscheInPossession=3} as double,",
+				"          {PorscheInPossession>=4} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2021",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          {PorscheInPossession=1} as double,",
+				"          {PorscheInPossession=2} as double,",
+				"          {PorscheInPossession=3} as double,",
+				"          {PorscheInPossession>=4} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2022",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          {PorscheInPossession=1} as double,",
+				"          {PorscheInPossession=2} as double,",
+				"          {PorscheInPossession=3} as double,",
+				"          {PorscheInPossession>=4} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2023",
+				"source2019 compose(mapParameter(",
+				"          market = $market,",
+				"          year = '2019'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName,",
+				"          GroupType,",
+				"          value1 = {PorscheInPossession=1},",
+				"          value2 = {PorscheInPossession=2},",
+				"          value3 = {PorscheInPossession=3},",
+				"          value4 = {PorscheInPossession>=4},",
+				"          value5 = {PorscheInPossession=1}",
+				"     ),",
+				"     composition: '_capValues') ~> capValues2019@(output1)",
+				"source2020 compose(mapParameter(",
+				"          market = $market,",
+				"          year = '2020'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName,",
+				"          GroupType,",
+				"          value1 = {PorscheInPossession=1},",
+				"          value2 = {PorscheInPossession=2},",
+				"          value3 = {PorscheInPossession=3},",
+				"          value4 = {PorscheInPossession>=4},",
+				"          value5 = {PorscheInPossession=1}",
+				"     ),",
+				"     composition: '_capValues') ~> capValues2020@(output1)",
+				"source2021 compose(mapParameter(",
+				"          market = $market,",
+				"          year = '2021'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName,",
+				"          GroupType,",
+				"          value1 = {PorscheInPossession=1},",
+				"          value2 = {PorscheInPossession=2},",
+				"          value3 = {PorscheInPossession=3},",
+				"          value4 = {PorscheInPossession>=4},",
+				"          value5 = {PorscheInPossession=1}",
+				"     ),",
+				"     composition: '_capValues') ~> capValues2021@(output1)",
+				"source2022 compose(mapParameter(",
+				"          market = $market,",
+				"          year = '2022'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName,",
+				"          GroupType,",
+				"          value1 = {PorscheInPossession=1},",
+				"          value2 = {PorscheInPossession=2},",
+				"          value3 = {PorscheInPossession=3},",
+				"          value4 = {PorscheInPossession>=4},",
+				"          value5 = {PorscheInPossession=1}",
+				"     ),",
+				"     composition: '_capValues') ~> capValues2022@(output1)",
+				"source2023 compose(mapParameter(",
+				"          market = $market,",
+				"          year = '2023'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName,",
+				"          GroupType,",
+				"          value1 = {PorscheInPossession=1},",
+				"          value2 = {PorscheInPossession=2},",
+				"          value3 = {PorscheInPossession=3},",
+				"          value4 = {PorscheInPossession>=4},",
+				"          value5 = {PorscheInPossession=1}",
+				"     ),",
+				"     composition: '_capValues') ~> capValues2023@(output1)",
+				"capValues2019@output1, capValues2020@output1, capValues2021@output1, capValues2022@output1, capValues2023@output1 union(byName: true)~> UnionAllData",
+				"select1 derive(data = @(market, year, model, male_one, female_one, total_one, male_two, female_two, total_two, male_three, female_three, total_three, male_four, female_four, total_four)) ~> CreateDataArray",
+				"CreateDataArray aggregate(groupBy(dummy = 1),",
+				"     data = collect(data)) ~> aggregate",
+				"aggregate select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select",
+				"UnionAllData select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          model,",
+				"          male_one = value1_male,",
+				"          female_one = value1_female,",
+				"          total_one = value1_total,",
+				"          male_two = value2_male,",
+				"          female_two = value2_female,",
+				"          total_two = value2_total,",
+				"          male_three = value3_male,",
+				"          female_three = value3_female,",
+				"          total_three = value3_total,",
+				"          male_four = value4_male,",
+				"          female_four = value4_female,",
+				"          total_four = value4_total",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:[(concat('ageTotalCustomerBaseChart', $market, '.json'))],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
