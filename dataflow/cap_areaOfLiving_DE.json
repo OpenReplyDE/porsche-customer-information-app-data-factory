@@ -161,7 +161,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     partitionFileNames:[('areaOfLivingDE')],",
+				"     partitionFileNames:[('areaOfLivingDE.json')],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
