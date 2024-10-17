@@ -1,5 +1,5 @@
 {
-	"name": "areaOfLivingDE",
+	"name": "cap_areaOfLiving_DE",
 	"properties": {
 		"activities": [
 			{
@@ -16,8 +16,25 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "areaOfLivingDE",
-						"type": "DataFlowReference"
+						"referenceName": "cap_areaOfLiving_DE",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"source2019": {
+								"market": "DE"
+							},
+							"source2020": {
+								"market": "DE"
+							},
+							"source2021": {
+								"market": "DE"
+							},
+							"source2022": {
+								"market": "DE"
+							},
+							"source2023": {
+								"market": "DE"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
