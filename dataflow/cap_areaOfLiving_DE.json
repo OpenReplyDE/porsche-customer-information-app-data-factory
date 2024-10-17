@@ -54,7 +54,10 @@
 					"name": "logic",
 					"flowlet": {
 						"referenceName": "cap_areaOfLiving",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "'DE'"
+						}
 					}
 				}
 			],
@@ -114,7 +117,10 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source2023",
-				"source2019, source2020, source2021, source2022, source2023 compose(mapColumn(",
+				"source2019, source2020, source2021, source2022, source2023 compose(mapParameter(",
+				"          market = 'DE'",
+				"     ),",
+				"     mapColumn(",
 				"          GroupName = source2019@GroupName,",
 				"          GroupType = source2019@GroupType,",
 				"          village = source2019@Landgemeinde,",
@@ -155,7 +161,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     partitionFileNames:[(concat('ageTotalCustomerBaseChart', $market, '.json'))],",
+				"     partitionFileNames:[('areaOfLivingDE')],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
