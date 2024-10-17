@@ -1,5 +1,5 @@
 {
-	"name": "porscheInPossessionUK",
+	"name": "cap_porscheInPossession_UK",
 	"properties": {
 		"activities": [
 			{
@@ -16,8 +16,28 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "porscheInPossessionUK",
-						"type": "DataFlowReference"
+						"referenceName": "cap_porscheInPossession",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "'UK'"
+						},
+						"datasetParameters": {
+							"source2019": {
+								"market": "UK"
+							},
+							"source2020": {
+								"market": "UK"
+							},
+							"source2021": {
+								"market": "UK"
+							},
+							"source2022": {
+								"market": "UK"
+							},
+							"source2023": {
+								"market": "UK"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
