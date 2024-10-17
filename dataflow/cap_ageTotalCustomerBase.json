@@ -236,7 +236,7 @@
 				"     ),",
 				"     composition: '_capValues') ~> capValues2023@(output1)",
 				"capValues2019@output1, capValues2020@output1, capValues2021@output1, capValues2022@output1, capValues2023@output1 union(byName: true)~> UnionAllData",
-				"select1 derive(data = @(market, year, model, male, female, all)) ~> CreateDataArray",
+				"select1 derive(data = @(market, year, model, male, female, total)) ~> CreateDataArray",
 				"CreateDataArray aggregate(groupBy(dummy = 1),",
 				"     data = collect(data)) ~> aggregate",
 				"aggregate select(mapColumn(",
