@@ -1,5 +1,5 @@
 {
-	"name": "cap_conquest",
+	"name": "cap_churnConquestRate",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -116,6 +116,9 @@
 				},
 				{
 					"name": "select"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -223,7 +226,7 @@
 				"     ),",
 				"     composition: '_capValues2') ~> capAverage2023@(output1)",
 				"capAverage2019@output1, capAverage2020@output1, capAverage2021@output1, capAverage2022@output1, capAverage2023@output1 union(byName: true)~> UnionAllData",
-				"UnionAllData derive(data = @(market, year, model, male, female, all)) ~> CreateDataArray",
+				"select1 derive(data = @(market, year, model, male_churnRate, male_conquestRate, female_churnRate, female_conquestRate, total_churnRate, total_conquestRate)) ~> CreateDataArray",
 				"CreateDataArray aggregate(groupBy(dummy = 1),",
 				"     data = collect(data)) ~> aggregate",
 				"aggregate select(mapColumn(",
@@ -231,6 +234,19 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> select",
+				"UnionAllData select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          model,",
+				"          male_churnRate = value1_male,",
+				"          female_churnRate = value1_female,",
+				"          total_churnRate = value1_all,",
+				"          male_conquestRate = value2_male,",
+				"          female_conquestRate = value2_female,",
+				"          total_conquestRate = value2_all",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
 				"select sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'json',",
