@@ -51,7 +51,7 @@
 			],
 			"transformations": [
 				{
-					"name": "capAverage2019",
+					"name": "capValues2019",
 					"flowlet": {
 						"referenceName": "_capValues",
 						"type": "DataFlowReference",
@@ -62,7 +62,7 @@
 					}
 				},
 				{
-					"name": "capAverage2020",
+					"name": "capValues2020",
 					"flowlet": {
 						"referenceName": "_capValues",
 						"type": "DataFlowReference",
@@ -73,7 +73,7 @@
 					}
 				},
 				{
-					"name": "capAverage2021",
+					"name": "capValues2021",
 					"flowlet": {
 						"referenceName": "_capValues",
 						"type": "DataFlowReference",
@@ -84,18 +84,18 @@
 					}
 				},
 				{
-					"name": "capAverage2022",
+					"name": "capValues2022",
 					"flowlet": {
 						"referenceName": "_capValues",
 						"type": "DataFlowReference",
 						"parameters": {
-							"market": "toString($market)",
+							"market": "$market",
 							"year": "'2022'"
 						}
 					}
 				},
 				{
-					"name": "capAverage2023",
+					"name": "capValues2023",
 					"flowlet": {
 						"referenceName": "_capValues",
 						"type": "DataFlowReference",
@@ -116,6 +116,9 @@
 				},
 				{
 					"name": "SelectDataArray"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -169,9 +172,13 @@
 				"     mapColumn(",
 				"          GroupName,",
 				"          GroupType,",
-				"          value = AverageHoldingPeriod",
+				"          value1 = AverageHoldingPeriod,",
+				"          value2 = AverageHoldingPeriod,",
+				"          value3 = AverageHoldingPeriod,",
+				"          value4 = AverageHoldingPeriod,",
+				"          value5 = AverageHoldingPeriod",
 				"     ),",
-				"     composition: '_capValues') ~> capAverage2019@(output1)",
+				"     composition: '_capValues') ~> capValues2019@(output1)",
 				"source2020 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2020'",
@@ -179,9 +186,13 @@
 				"     mapColumn(",
 				"          GroupName,",
 				"          GroupType,",
-				"          value = AverageHoldingPeriod",
+				"          value1 = AverageHoldingPeriod,",
+				"          value2 = AverageHoldingPeriod,",
+				"          value3 = AverageHoldingPeriod,",
+				"          value4 = AverageHoldingPeriod,",
+				"          value5 = AverageHoldingPeriod",
 				"     ),",
-				"     composition: '_capValues') ~> capAverage2020@(output1)",
+				"     composition: '_capValues') ~> capValues2020@(output1)",
 				"source2021 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2021'",
@@ -189,19 +200,27 @@
 				"     mapColumn(",
 				"          GroupName,",
 				"          GroupType,",
-				"          value = AverageHoldingPeriod",
+				"          value1 = AverageHoldingPeriod,",
+				"          value2 = AverageHoldingPeriod,",
+				"          value3 = AverageHoldingPeriod,",
+				"          value4 = AverageHoldingPeriod,",
+				"          value5 = AverageHoldingPeriod",
 				"     ),",
-				"     composition: '_capValues') ~> capAverage2021@(output1)",
+				"     composition: '_capValues') ~> capValues2021@(output1)",
 				"source2022 compose(mapParameter(",
-				"          market = toString($market),",
+				"          market = $market,",
 				"          year = '2022'",
 				"     ),",
 				"     mapColumn(",
 				"          GroupName,",
 				"          GroupType,",
-				"          value = AverageHoldingPeriod",
+				"          value1 = AverageHoldingPeriod,",
+				"          value2 = AverageHoldingPeriod,",
+				"          value3 = AverageHoldingPeriod,",
+				"          value4 = AverageHoldingPeriod,",
+				"          value5 = AverageHoldingPeriod",
 				"     ),",
-				"     composition: '_capValues') ~> capAverage2022@(output1)",
+				"     composition: '_capValues') ~> capValues2022@(output1)",
 				"source2023 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2023'",
@@ -209,11 +228,15 @@
 				"     mapColumn(",
 				"          GroupName,",
 				"          GroupType,",
-				"          value = AverageHoldingPeriod",
+				"          value1 = AverageHoldingPeriod,",
+				"          value2 = AverageHoldingPeriod,",
+				"          value3 = AverageHoldingPeriod,",
+				"          value4 = AverageHoldingPeriod,",
+				"          value5 = AverageHoldingPeriod",
 				"     ),",
-				"     composition: '_capValues') ~> capAverage2023@(output1)",
-				"capAverage2019@output1, capAverage2020@output1, capAverage2021@output1, capAverage2022@output1, capAverage2023@output1 union(byName: true)~> UnionAllData",
-				"UnionAllData derive(data = @(market, year, model, male, female, all)) ~> CreateDataArray",
+				"     composition: '_capValues') ~> capValues2023@(output1)",
+				"capValues2019@output1, capValues2020@output1, capValues2021@output1, capValues2022@output1, capValues2023@output1 union(byName: true)~> UnionAllData",
+				"select1 derive(data = @(market, year, model, male, female, total)) ~> CreateDataArray",
 				"CreateDataArray aggregate(groupBy(dummy = 1),",
 				"     data = collect(data)) ~> AggregateToArray",
 				"AggregateToArray select(mapColumn(",
@@ -221,6 +244,16 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> SelectDataArray",
+				"UnionAllData select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          model,",
+				"          male = value1_male,",
+				"          female = value1_female,",
+				"          total = value1_total",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
 				"SelectDataArray sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'json',",
