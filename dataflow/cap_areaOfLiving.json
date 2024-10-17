@@ -1,0 +1,242 @@
+{
+	"name": "cap_areaOfLiving",
+	"properties": {
+		"type": "Flowlet",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "capValues2019",
+					"flowlet": {
+						"referenceName": "_capValues",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "$market",
+							"year": "'2019'"
+						}
+					}
+				},
+				{
+					"name": "capValues2020",
+					"flowlet": {
+						"referenceName": "_capValues",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "$market",
+							"year": "'2020'"
+						}
+					}
+				},
+				{
+					"name": "capValues2021",
+					"flowlet": {
+						"referenceName": "_capValues",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "$market",
+							"year": "'2021'"
+						}
+					}
+				},
+				{
+					"name": "capValues2022",
+					"flowlet": {
+						"referenceName": "_capValues",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "$market",
+							"year": "'2022'"
+						}
+					}
+				},
+				{
+					"name": "capValues2023",
+					"flowlet": {
+						"referenceName": "_capValues",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "$market",
+							"year": "'2023'"
+						}
+					}
+				},
+				{
+					"name": "UnionAllData"
+				},
+				{
+					"name": "CreateDataArray"
+				},
+				{
+					"name": "aggregate"
+				},
+				{
+					"name": "select"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "input2019"
+				},
+				{
+					"name": "input2020"
+				},
+				{
+					"name": "input2021"
+				},
+				{
+					"name": "input2022"
+				},
+				{
+					"name": "input2023"
+				},
+				{
+					"name": "output1"
+				}
+			],
+			"scriptLines": [
+				"input(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          village as double,",
+				"          suburbs as double,",
+				"          town as double,",
+				"          city as double",
+				"     ),",
+				"     order: 0,",
+				"     allowSchemaDrift: true) ~> input2019",
+				"input(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          village as double,",
+				"          suburbs as double,",
+				"          town as double,",
+				"          city as double",
+				"     ),",
+				"     order: 1,",
+				"     allowSchemaDrift: true) ~> input2020",
+				"input(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          village as double,",
+				"          suburbs as double,",
+				"          town as double,",
+				"          city as double",
+				"     ),",
+				"     order: 2,",
+				"     allowSchemaDrift: true) ~> input2021",
+				"input(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          village as double,",
+				"          suburbs as double,",
+				"          town as double,",
+				"          city as double",
+				"     ),",
+				"     order: 3,",
+				"     allowSchemaDrift: true) ~> input2022",
+				"input(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          village as double,",
+				"          suburbs as double,",
+				"          town as double,",
+				"          city as double",
+				"     ),",
+				"     order: 4,",
+				"     allowSchemaDrift: true) ~> input2023",
+				"input2019 compose(mapParameter(",
+				"          market = $market,",
+				"          year = '2019'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName = {},",
+				"          GroupType = {},",
+				"          value1 = {},",
+				"          value2 = {},",
+				"          value3 = {},",
+				"          value4 = {},",
+				"          value5 = {}",
+				"     ),",
+				"     composition: '_capValues') ~> capValues2019@(output1)",
+				"input2020 compose(mapParameter(",
+				"          market = $market,",
+				"          year = '2020'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName = {},",
+				"          GroupType = {},",
+				"          value1 = {},",
+				"          value2 = {},",
+				"          value3 = {},",
+				"          value4 = {},",
+				"          value5 = {}",
+				"     ),",
+				"     composition: '_capValues') ~> capValues2020@(output1)",
+				"input2021 compose(mapParameter(",
+				"          market = $market,",
+				"          year = '2021'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName = {},",
+				"          GroupType = {},",
+				"          value1 = {},",
+				"          value2 = {},",
+				"          value3 = {},",
+				"          value4 = {},",
+				"          value5 = {}",
+				"     ),",
+				"     composition: '_capValues') ~> capValues2021@(output1)",
+				"input2022 compose(mapParameter(",
+				"          market = $market,",
+				"          year = '2022'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName = {},",
+				"          GroupType = {},",
+				"          value1 = {},",
+				"          value2 = {},",
+				"          value3 = {},",
+				"          value4 = {},",
+				"          value5 = {}",
+				"     ),",
+				"     composition: '_capValues') ~> capValues2022@(output1)",
+				"input2023 compose(mapParameter(",
+				"          market = $market,",
+				"          year = '2023'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName = {},",
+				"          GroupType = {},",
+				"          value1 = {},",
+				"          value2 = {},",
+				"          value3 = {},",
+				"          value4 = {},",
+				"          value5 = {}",
+				"     ),",
+				"     composition: '_capValues') ~> capValues2023@(output1)",
+				"capValues2019@output1, capValues2020@output1, capValues2021@output1, capValues2022@output1, capValues2023@output1 union(byName: true)~> UnionAllData",
+				"select1 derive(data = @(market, year, model, male, female, total)) ~> CreateDataArray",
+				"CreateDataArray aggregate(groupBy(dummy = 1),",
+				"     data = collect(data)) ~> aggregate",
+				"aggregate select(mapColumn(",
+				"          data",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select",
+				"UnionAllData select(mapColumn(",
+				"          market,",
+				"          year,",
+				"          model,",
+				"          male = value1_male,",
+				"          female = value1_female,",
+				"          total = value1_total",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select output() ~> output1"
+			]
+		}
+	}
+}
