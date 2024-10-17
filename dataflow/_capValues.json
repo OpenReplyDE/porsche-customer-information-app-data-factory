@@ -1,5 +1,5 @@
 {
-	"name": "_capValues",
+	"name": "_capValues2",
 	"properties": {
 		"type": "Flowlet",
 		"typeProperties": {
@@ -14,9 +14,6 @@
 				},
 				{
 					"name": "DeriveModelColumns"
-				},
-				{
-					"name": "SelectModelAll"
 				},
 				{
 					"name": "AddModelTotalToGender"
@@ -45,7 +42,8 @@
 				"input(output(",
 				"          GroupName as string,",
 				"          GroupType as string,",
-				"          value as double",
+				"          value1 as double,",
+				"          value2 as double",
 				"     ),",
 				"     order: 0,",
 				"     allowSchemaDrift: true) ~> input",
@@ -65,8 +63,10 @@
 				"        concat(split(GroupName, '/')[1], ' All')",
 				"      )",
 				"    ),",
-				"          male = iif(endsWith(GroupName, '/Male'), value, toDouble(0)),",
-				"          female = iif(endsWith(GroupName, '/Female'), value, toDouble(0))) ~> DeriveGenderColumns",
+				"          value1_male = iif(endsWith(GroupName, '/Male'), value1, toDouble(0)),",
+				"          value1_female = iif(endsWith(GroupName, '/Female'), value1, toDouble(0)),",
+				"          value2_male = iif(endsWith(GroupName, '/Male'), value2, toDouble(0)),",
+				"          value2_female = iif(endsWith(GroupName, '/Female'), value2, toDouble(0))) ~> DeriveGenderColumns",
 				"SplitModelTypes@Model derive(ModelName = iif(GroupName == 'Porsche', 'All Models',",
 				"      iif(locate(' ', GroupName) > 0,",
 				"        concat(",
@@ -77,27 +77,26 @@
 				"        concat(GroupName, ' All')",
 				"      )",
 				"    ),",
-				"          ModelTotal = value) ~> DeriveModelColumns",
-				"DeriveModelColumns select(mapColumn(",
-				"          ModelName,",
-				"          ModelAll = ModelTotal",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectModelAll",
-				"DeriveGenderColumns, SelectModelAll lookup(model == ModelName,",
+				"          value1_all = value1,",
+				"          value2_all = value2) ~> DeriveModelColumns",
+				"DeriveGenderColumns, DeriveModelColumns lookup(model == ModelName,",
 				"     multiple: false,",
 				"     pickup: 'any',",
 				"     broadcast: 'auto')~> AddModelTotalToGender",
 				"AddModelTotalToGender aggregate(groupBy(market,",
 				"          year,",
 				"          model),",
-				"     male = max(male),",
-				"          female = max(female),",
-				"          all = max(ModelAll)) ~> AggregateGenderData",
+				"     value1_male = max(value1_male),",
+				"          value1_female = max(value1_female),",
+				"          value1_all = max(value1_all),",
+				"          value2_male = max(value2_male),",
+				"          value2_female = max(value2_female),",
+				"          value2_all = max(value2_all)) ~> AggregateGenderData",
 				"SplitModelTypes@ModelEngine derive(market = $market,",
 				"          year = $year,",
 				"          model = replace(GroupName, '/', ' '),",
-				"          all = value) ~> DeriveEngineColumns",
+				"          value1_all = value1,",
+				"          value2_all = value2) ~> DeriveEngineColumns",
 				"AggregateGenderData, DeriveEngineColumns union(byName: true)~> union1",
 				"union1 output() ~> output1"
 			]
