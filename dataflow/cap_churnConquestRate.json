@@ -51,9 +51,9 @@
 			],
 			"transformations": [
 				{
-					"name": "capAverage2019",
+					"name": "capValues2019",
 					"flowlet": {
-						"referenceName": "_capValues2",
+						"referenceName": "_capValues",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -62,9 +62,9 @@
 					}
 				},
 				{
-					"name": "capAverage2020",
+					"name": "capValues2020",
 					"flowlet": {
-						"referenceName": "_capValues2",
+						"referenceName": "_capValues",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -73,9 +73,9 @@
 					}
 				},
 				{
-					"name": "capAverage2021",
+					"name": "capValues2021",
 					"flowlet": {
-						"referenceName": "_capValues2",
+						"referenceName": "_capValues",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -84,9 +84,9 @@
 					}
 				},
 				{
-					"name": "capAverage2022",
+					"name": "capValues2022",
 					"flowlet": {
-						"referenceName": "_capValues2",
+						"referenceName": "_capValues",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -95,9 +95,9 @@
 					}
 				},
 				{
-					"name": "capAverage2023",
+					"name": "capValues2023",
 					"flowlet": {
-						"referenceName": "_capValues2",
+						"referenceName": "_capValues",
 						"type": "DataFlowReference",
 						"parameters": {
 							"market": "$market",
@@ -178,9 +178,12 @@
 				"          GroupName,",
 				"          GroupType,",
 				"          value1 = ChurnRate,",
-				"          value2 = ConquestRate",
+				"          value2 = ConquestRate,",
+				"          value3 = ChurnRate,",
+				"          value4 = ChurnRate,",
+				"          value5 = ChurnRate",
 				"     ),",
-				"     composition: '_capValues2') ~> capAverage2019@(output1)",
+				"     composition: '_capValues') ~> capValues2019@(output1)",
 				"source2020 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2020'",
@@ -189,9 +192,12 @@
 				"          GroupName,",
 				"          GroupType,",
 				"          value1 = ChurnRate,",
-				"          value2 = ConquestRate",
+				"          value2 = ConquestRate,",
+				"          value3 = ChurnRate,",
+				"          value4 = ChurnRate,",
+				"          value5 = ChurnRate",
 				"     ),",
-				"     composition: '_capValues2') ~> capAverage2020@(output1)",
+				"     composition: '_capValues') ~> capValues2020@(output1)",
 				"source2021 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2021'",
@@ -200,9 +206,12 @@
 				"          GroupName,",
 				"          GroupType,",
 				"          value1 = ChurnRate,",
-				"          value2 = ConquestRate",
+				"          value2 = ConquestRate,",
+				"          value3 = ChurnRate,",
+				"          value4 = ChurnRate,",
+				"          value5 = ChurnRate",
 				"     ),",
-				"     composition: '_capValues2') ~> capAverage2021@(output1)",
+				"     composition: '_capValues') ~> capValues2021@(output1)",
 				"source2022 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2022'",
@@ -211,9 +220,12 @@
 				"          GroupName,",
 				"          GroupType,",
 				"          value1 = ChurnRate,",
-				"          value2 = ConquestRate",
+				"          value2 = ConquestRate,",
+				"          value3 = ChurnRate,",
+				"          value4 = ChurnRate,",
+				"          value5 = ChurnRate",
 				"     ),",
-				"     composition: '_capValues2') ~> capAverage2022@(output1)",
+				"     composition: '_capValues') ~> capValues2022@(output1)",
 				"source2023 compose(mapParameter(",
 				"          market = $market,",
 				"          year = '2023'",
@@ -222,10 +234,13 @@
 				"          GroupName,",
 				"          GroupType,",
 				"          value1 = ChurnRate,",
-				"          value2 = ConquestRate",
+				"          value2 = ConquestRate,",
+				"          value3 = ChurnRate,",
+				"          value4 = ChurnRate,",
+				"          value5 = ChurnRate",
 				"     ),",
-				"     composition: '_capValues2') ~> capAverage2023@(output1)",
-				"capAverage2019@output1, capAverage2020@output1, capAverage2021@output1, capAverage2022@output1, capAverage2023@output1 union(byName: true)~> UnionAllData",
+				"     composition: '_capValues') ~> capValues2023@(output1)",
+				"capValues2019@output1, capValues2020@output1, capValues2021@output1, capValues2022@output1, capValues2023@output1 union(byName: true)~> UnionAllData",
 				"select1 derive(data = @(market, year, model, male_churnRate, male_conquestRate, female_churnRate, female_conquestRate, total_churnRate, total_conquestRate)) ~> CreateDataArray",
 				"CreateDataArray aggregate(groupBy(dummy = 1),",
 				"     data = collect(data)) ~> aggregate",
@@ -240,10 +255,10 @@
 				"          model,",
 				"          male_churnRate = value1_male,",
 				"          female_churnRate = value1_female,",
-				"          total_churnRate = value1_all,",
+				"          total_churnRate = value1_total,",
 				"          male_conquestRate = value2_male,",
 				"          female_conquestRate = value2_female,",
-				"          total_conquestRate = value2_all",
+				"          total_conquestRate = value2_total",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
