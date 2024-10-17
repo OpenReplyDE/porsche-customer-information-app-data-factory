@@ -266,7 +266,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     partitionFileNames:[(concat('ageTotalCustomerBaseChart', $market, '.json'))],",
+				"     partitionFileNames:[(concat('churnConquestRate', $market, '.json'))],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
