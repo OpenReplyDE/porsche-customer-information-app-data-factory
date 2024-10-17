@@ -258,7 +258,7 @@
 				"     validateSchema: false,",
 				"     format: 'json',",
 				"     fileSystem: 'output',",
-				"     partitionFileNames:[(concat('averageHoldingPeriodChart', $market, '.json'))],",
+				"     partitionFileNames:[(concat('newCustomerRate', $market, '.json'))],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
