@@ -1,0 +1,175 @@
+{
+	"name": "cap_areaOfLiving_CN",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CAP_2019",
+						"type": "DatasetReference"
+					},
+					"name": "source2019"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_2020",
+						"type": "DatasetReference"
+					},
+					"name": "source2020"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_2021",
+						"type": "DatasetReference"
+					},
+					"name": "source2021"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_2022",
+						"type": "DatasetReference"
+					},
+					"name": "source2022"
+				},
+				{
+					"dataset": {
+						"referenceName": "CAP_2023",
+						"type": "DatasetReference"
+					},
+					"name": "source2023"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "logic",
+					"flowlet": {
+						"referenceName": "cap_areaOfLiving",
+						"type": "DataFlowReference",
+						"parameters": {
+							"market": "'CN'"
+						}
+					}
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          T4 as double,",
+				"          T3 as double,",
+				"          T2 as double,",
+				"          T1 as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2019",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          T4 as double,",
+				"          T3 as double,",
+				"          T2 as double,",
+				"          T1 as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2020",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          T4 as double,",
+				"          T3 as double,",
+				"          T2 as double,",
+				"          T1 as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2021",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          T4 as double,",
+				"          T3 as double,",
+				"          T2 as double,",
+				"          T1 as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2022",
+				"source(output(",
+				"          GroupName as string,",
+				"          GroupType as string,",
+				"          T4 as double,",
+				"          T3 as double,",
+				"          T2 as double,",
+				"          T1 as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2023",
+				"source2019, source2020, source2021, source2022, source2023 compose(mapParameter(",
+				"          market = 'CN'",
+				"     ),",
+				"     mapColumn(",
+				"          GroupName = source2019@GroupName,",
+				"          GroupType = source2019@GroupType,",
+				"          village = source2019@T4,",
+				"          suburbs = source2019@T3,",
+				"          town = source2019@T2,",
+				"          city = source2019@T1",
+				"     ),mapColumn(",
+				"          GroupName = source2020@GroupName,",
+				"          GroupType = source2020@GroupType,",
+				"          village = source2020@T4,",
+				"          suburbs = source2020@T3,",
+				"          town = source2020@T2,",
+				"          city = source2020@T1",
+				"     ),mapColumn(",
+				"          GroupName = source2021@GroupName,",
+				"          GroupType = source2021@GroupType,",
+				"          village = source2021@T4,",
+				"          suburbs = source2021@T3,",
+				"          town = source2021@T2,",
+				"          city = source2021@T1",
+				"     ),mapColumn(",
+				"          GroupName = source2022@GroupName,",
+				"          GroupType = source2022@GroupType,",
+				"          village = source2022@T4,",
+				"          suburbs = source2022@T3,",
+				"          town = source2022@T2,",
+				"          city = source2022@T1",
+				"     ),mapColumn(",
+				"          GroupName = source2023@GroupName,",
+				"          GroupType = source2023@GroupType,",
+				"          village = source2023@T4,",
+				"          suburbs = source2023@T3,",
+				"          town = source2023@T2,",
+				"          city = source2023@T1",
+				"     ),",
+				"     composition: 'cap_areaOfLiving') ~> logic@(output1)",
+				"logic@output1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'output',",
+				"     partitionFileNames:[('areaOfLivingCN')],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
