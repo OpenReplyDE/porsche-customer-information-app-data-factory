@@ -1,9 +1,9 @@
 {
-	"name": "vehiclesPerHouseholdData",
+	"name": "pss_numberOfVehiclesPerHousehold",
 	"properties": {
 		"activities": [
 			{
-				"name": "vehiclesPerHouseholdData",
+				"name": "numberOfVehiclesPerHousehold",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "vehiclesPerHouseholdData",
+						"referenceName": "pss_numberOfVehiclesPerHousehold",
 						"type": "DataFlowReference"
 					},
 					"compute": {
