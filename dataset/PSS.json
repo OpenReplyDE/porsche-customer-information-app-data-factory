@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "240827_CIA-Data_PSS_RawData_2019-2023_00.csv",
+				"fileName": "240823_CIA-Data_PSS_RawData_2019-2023_00.csv",
 				"container": "test-data"
 			},
 			"columnDelimiter": ";",
