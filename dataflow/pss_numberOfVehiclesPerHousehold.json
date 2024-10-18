@@ -61,6 +61,9 @@
 				},
 				{
 					"name": "SelectArrayColumn"
+				},
+				{
+					"name": "PrepareModel"
 				}
 			],
 			"scriptLines": [
@@ -279,8 +282,8 @@
 				"    !isNull(Q1950)) ~> FilterValidData",
 				"FilterValidData aggregate(groupBy(DeriveBasicData@market,",
 				"          year,",
-				"          ModelGroup,",
-				"          BaseModel),",
+				"          BaseModel,",
+				"          ModelGroup),",
 				"     total_count = count(1),",
 				"          male_count = countIf(Q1701 == 1),",
 				"          female_count = countIf(Q1701 == 2),",
@@ -353,7 +356,7 @@
 				"          female_vehicle5 = countIf(Q1701 == 2 && Q1950 == 5),",
 				"          female_vehicle6 = countIf(Q1701 == 2 && Q1950 == 6),",
 				"          female_vehicleMoreThan6 = countIf(Q1701 == 2 && Q1950 > 6)) ~> AggregateBaseModelData",
-				"AggregateBaseModelData derive(ModelGroup = BaseModel + ' All') ~> PrepareBaseModelData",
+				"AggregateBaseModelData derive(model = BaseModel + ' All') ~> PrepareBaseModelData",
 				"FilterValidData aggregate(groupBy(DeriveBasicData@market,",
 				"          year),",
 				"     total_count = count(1),",
@@ -380,13 +383,13 @@
 				"          female_vehicle5 = countIf(Q1701 == 2 && Q1950 == 5),",
 				"          female_vehicle6 = countIf(Q1701 == 2 && Q1950 == 6),",
 				"          female_vehicleMoreThan6 = countIf(Q1701 == 2 && Q1950 > 6)) ~> AggregateAllModelsData",
-				"AggregateAllModelsData derive(ModelGroup = 'All Models') ~> PrepareAllModelsData",
-				"PrepareAllModelsData, PrepareBaseModelData, AggregateData union(byName: false)~> UnionModelData",
+				"AggregateAllModelsData derive(model = 'All Models') ~> PrepareAllModelsData",
+				"PrepareAllModelsData, PrepareBaseModelData, PrepareModel union(byName: false)~> UnionModelData",
 				"CalculatePercentages aggregate(groupBy(dummy = 1),",
 				"     data = collect(@(",
 				"    market = market,",
 				"    year = year,",
-				"    model = ModelGroup,",
+				"    model = model,",
 				"    total_count = total_count,",
 				"    male_count = male_count,",
 				"    female_count = female_count,",
@@ -417,6 +420,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectArrayColumn",
+				"AggregateData derive(model = ModelGroup) ~> PrepareModel",
 				"SelectArrayColumn sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'json',",
